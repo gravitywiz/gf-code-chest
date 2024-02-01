@@ -247,6 +247,7 @@ class GWiz_GF_Custom_Code extends GFFeedAddOn {
 		}
 
 		add_filter( 'gform_register_init_scripts', array( $this, 'register_init_script' ), 99 );
+		add_filter( 'gform_get_form_filter', array( $this, 'add_custom_css' ), 10, 2 );
 	}
 
 	public function enqueue_editor_script() {
@@ -301,6 +302,18 @@ class GWiz_GF_Custom_Code extends GFFeedAddOn {
 		$slug = "{$this->_slug}_{$form['id']}";
 
 		GFFormDisplay::add_init_script( $form['id'], $slug, GFFormDisplay::ON_PAGE_RENDER, $script );
+	}
+
+	public function add_custom_css( $form_string, $form ) {
+		$custom_css = $this->get_custom_css( $form );
+		$custom_css = html_entity_decode( $custom_css );
+		$custom_css = str_replace( 'GFFORMID', $form['id'], $custom_css );
+
+		if ( ! empty( $custom_css ) ) {
+			$form_string .= sprintf( '<style>%s</style>', $custom_css );
+		}
+
+		return $form_string;
 	}
 
 	public function is_applicable_form( $form ) {
