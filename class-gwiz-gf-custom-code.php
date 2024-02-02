@@ -252,6 +252,11 @@ class GWiz_GF_Custom_Code extends GFFeedAddOn {
 		add_filter( 'gform_register_init_scripts', array( $this, 'register_init_scripts' ), 99, 1 );
 		add_filter( 'gform_register_init_scripts', array( $this, 'maybe_register_custom_js_scripts_first' ), 100, 1 );
 		add_filter( 'gform_register_init_scripts', array( $this, 'maybe_remove_legacy_custom_js_scripts' ), 100, 1 );
+		/**
+		 * must come after other gform_register_init_scripts callbacks as this needs to be the last registered
+		 * script so that the action runs only after all other scripts have been loaded.
+		 */
+		add_filter( 'gform_register_init_scripts', array( $this, 'register_gfcc_deferred_action_script' ), 101, 1 );
 		add_filter( 'gform_get_form_filter', array( $this, 'add_custom_css' ), 10, 2 );
 	}
 
@@ -305,6 +310,24 @@ class GWiz_GF_Custom_Code extends GFFeedAddOn {
 		$script = '( function( $ ) { ' . $script . ' } )( jQuery );';
 
 		$slug = "{$this->_slug}_{$form['id']}";
+
+		GFFormDisplay::add_init_script( $form['id'], $slug, GFFormDisplay::ON_PAGE_RENDER, $script );
+	}
+
+	public function register_gfcc_deferred_action_script( $form ) {
+		if ( ! $this->is_applicable_form( $form ) ) {
+			return;
+		}
+
+		$form_id = $form['id'];
+		$slug    = "{$this->_slug}_deferred_action_{$form['id']}";
+		/**
+		 * This action is fired after all other Custom Code scripts have been loaded
+		 * and ran in the browser.
+		 *
+		 * @param string|int $form_id The ID of the form.
+		 */
+		$script = "window.gform.doAction('gfcc_deferred', {$form_id});";
 
 		GFFormDisplay::add_init_script( $form['id'], $slug, GFFormDisplay::ON_PAGE_RENDER, $script );
 	}
@@ -603,7 +626,7 @@ EOT;
 			echo '<div class="notice notice-warning is-dismissible">';
 			/* translators: %s: <b> opening HTML tag, %s </b> closing HTML tag */
 			echo '<p>' . __( sprintf(
-			'Warning: %sGravity Forms Custom Javascript%s is currently active.', '<b>', '</b>' ),
+				'Warning: %sGravity Forms Custom Javascript%s is currently active.', '<b>', '</b>' ),
 				'gf-custom-code'
 			) . '</p>';
 			echo '<p>' . __(
