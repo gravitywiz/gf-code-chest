@@ -251,6 +251,7 @@ class GWiz_GF_Custom_Code extends GFFeedAddOn {
 
 		add_filter( 'gform_register_init_scripts', array( $this, 'register_init_scripts' ), 99, 1 );
 		add_filter( 'gform_register_init_scripts', array( $this, 'maybe_register_custom_js_scripts_first' ), 100, 1 );
+		add_filter( 'gform_register_init_scripts', array( $this, 'maybe_remove_legacy_custom_js_scripts' ), 100, 1 );
 		add_filter( 'gform_get_form_filter', array( $this, 'add_custom_css' ), 10, 2 );
 	}
 
@@ -334,6 +335,33 @@ class GWiz_GF_Custom_Code extends GFFeedAddOn {
 			if ( strpos( $slug, $this->_slug ) === 0 ) {
 				$filtered = array( $slug => $script ) + $filtered;
 			} else {
+				$filtered[ $slug ] = $script;
+			}
+		}
+
+		GFFormDisplay::$init_scripts[ $form['id'] ] = $filtered;
+	}
+
+	public function maybe_remove_legacy_custom_js_scripts( $form ) {
+		/**
+		 * Whether or not to remove legacy Custom JS plugin scripts from the
+		 * registration list.
+		 *
+		 * @param bool $should_remove_legacy_custom_js_scripts Whether to remove legacy Custom JS plugin scripts from the registration list.
+		 * @param array $form The form object.
+		 */
+		if ( ! apply_filters( 'should_remove_legacy_custom_js_scripts', true, $form ) ) {
+			return;
+		}
+
+		$scripts = rgar( GFFormDisplay::$init_scripts, $form['id'] );
+		if ( empty( $scripts ) ) {
+			return;
+		}
+
+		$filtered = array();
+		foreach ( $scripts as $slug => $script ) {
+			if ( strpos( $slug, 'gf_custom_js' ) === false ) {
 				$filtered[ $slug ] = $script;
 			}
 		}
@@ -575,7 +603,7 @@ EOT;
 			echo '<div class="notice notice-warning is-dismissible">';
 			/* translators: %s: <b> opening HTML tag, %s </b> closing HTML tag */
 			echo '<p>' . __( sprintf(
-				'Warning: %sGravity Forms Custom Javascript%s is currently active.', '<b>', '</b>' ),
+			'Warning: %sGravity Forms Custom Javascript%s is currently active.', '<b>', '</b>' ),
 				'gf-custom-code'
 			) . '</p>';
 			echo '<p>' . __(
