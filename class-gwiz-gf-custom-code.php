@@ -168,7 +168,7 @@ class GWiz_GF_Custom_Code extends GFFeedAddOn {
 				'changelog_url'   => 'https://raw.githubusercontent.com/gravitywiz/gf-custom-code/master/changelog.txt',
 				'icons'           => array(
 					// TODO make sure this dashicon id string works correctly:
-					'dashicon-editor-code'
+					'dashicon-editor-code',
 					// 'svg' => 'https://raw.githubusercontent.com/gravitywiz/gf-custom-code/master/icon.svg',
 				),
 				'banners'         => array(
@@ -293,8 +293,10 @@ class GWiz_GF_Custom_Code extends GFFeedAddOn {
 	public function save_custom_code_settings( $feed_id, $form_id, $settings, $feed_addon_instance ) {
 		$form = GFAPI::get_form( $form_id );
 
-		$form['custom_js']  = esc_html( rgpost( 'custom_js' ) );
-		$form['custom_css'] = esc_html( rgpost( 'custom_css' ) );
+		$form['custom_js']                     = esc_html( rgpost( 'custom_js' ) );
+		$form['custom_css']                    = esc_html( rgpost( 'custom_css' ) );
+		// TODO: there must be a better way to do this (e.g. automatically handled by GF 🤔🤔🤔).
+		$form['custom_code_scope_css_to_form'] = rgpost( '_gform_setting_custom_code_scope_css_to_form' ) === '1' ? true : false;
 
 		GFAPI::update_form( $form );
 	}
@@ -391,6 +393,15 @@ class GWiz_GF_Custom_Code extends GFFeedAddOn {
 		$custom_css = html_entity_decode( $custom_css );
 		$custom_css = str_replace( 'GFFORMID', $form['id'], $custom_css );
 
+		// check explicity if not set to false as the default value is "true"
+		// and unset value, empty string, etc. implies that the user has not
+		// explicity changed this.
+		if ( rgar( $form, 'custom_code_scope_css_to_form' ) !== false ) {
+			// alternatively this could be scoped to the form element with `#gform_FORMID`
+			$prefix     = '#gform_wrapper_' . $form['id'];
+			$custom_css = $this->prefix_css_selectors( $custom_css, $prefix );
+		}
+
 		if ( ! empty( $custom_css ) ) {
 			$form_string .= sprintf( '<style>%s</style>', $custom_css );
 		}
@@ -452,6 +463,13 @@ class GWiz_GF_Custom_Code extends GFFeedAddOn {
 						'callback' => function ( $setting ) use ( $form ) {
 							return $this->render_custom_css_setting( $form );
 						},
+					),
+					array(
+						'name'          => 'custom_code_scope_css_to_form',
+						'type'          => 'toggle',
+						'label'         => __( 'Scope CSS to this form only', 'gw-custom-code' ),
+						'tooltip'       => __( 'When enabled, the custom CSS will only be applied to this form. This works by adding "#gform_wrapper_GFFORMID" before all detected selectors.', 'gw-custom-code' ),
+						'default_value' => true,
 					),
 				),
 			),
@@ -629,5 +647,12 @@ EOT;
 			) . '</p>';
 			echo '</div>';
 		}
+	}
+
+
+	public function prefix_css_selectors( $css, $prefix ) {
+		return preg_replace_callback('/([^\r\n,{}]+)(,(?=[^}]*{)|\s*{)/', function( $matches ) use ( $prefix ) {
+			return $prefix . ' ' . trim( $matches[1] ) . $matches[2];
+		}, $css);
 	}
 }
