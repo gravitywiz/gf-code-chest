@@ -1,10 +1,10 @@
 <?php
 /**
- * @package gravityforms-custom-code
+ * @package gf-custom-code
  * @copyright Copyright (c) 2022, Gravity Wiz, LLC
  * @author Gravity Wiz <support@gravitywiz.com>
  * @license GPLv2
- * @link https://github.com/gravitywiz/gravityforms-custom-code
+ * @link https://github.com/gravitywiz/gf-custom-code
  */
 defined( 'ABSPATH' ) || die();
 
@@ -26,9 +26,9 @@ class GWiz_GF_Custom_Code extends GFFeedAddOn {
 	private static $instance = null;
 
 	protected $_version        = GWIZ_GF_CUSTOM_CODE_VERSION;
-	protected $_path           = 'gravityforms-custom-code/gravityforms-custom-code.php';
+	protected $_path           = 'gf-custom-code/gf-custom-code.php';
 	protected $_full_path      = __FILE__;
-	protected $_slug           = 'gravityforms-custom-code';
+	protected $_slug           = 'gf-custom-code';
 	protected $_title          = 'Gravity Forms Custom Code';
 	protected $_short_title    = 'Custom Code';
 	protected $_multiple_feeds = false;
@@ -39,11 +39,11 @@ class GWiz_GF_Custom_Code extends GFFeedAddOn {
 	 * @var array $_capabilities The capabilities needed for the Add-On
 	 */
 	protected $_capabilities = array(
-		'gravityforms-custom-code',
-		'gravityforms-custom-code_uninstall',
-		'gravityforms-custom-code_results',
-		'gravityforms-custom-code_settings',
-		'gravityforms-custom-code_form_settings',
+		'gf-cvustom-code',
+		'gf-custom-code_uninstall',
+		'gf-custom-code_results',
+		'gf-custom-code_settings',
+		'gf-custom-code_form_settings',
 	);
 
 	/**
@@ -51,21 +51,21 @@ class GWiz_GF_Custom_Code extends GFFeedAddOn {
 	 *
 	 * @var string $_capabilities_settings_page The capability needed to access the Add-On settings page.
 	 */
-	protected $_capabilities_settings_page = 'gravityforms-custom-code_settings';
+	protected $_capabilities_settings_page = 'gf-custom-code_settings';
 
 	/**
 	 * Defines the capability needed to access the Add-On form settings page.
 	 *
 	 * @var string $_capabilities_form_settings The capability needed to access the Add-On form settings page.
 	 */
-	protected $_capabilities_form_settings = 'gravityforms-custom-code_form_settings';
+	protected $_capabilities_form_settings = 'gf-custom-code_form_settings';
 
 	/**
 	 * Defines the capability needed to uninstall the Add-On.
 	 *
 	 * @var string $_capabilities_uninstall The capability needed to uninstall the Add-On.
 	 */
-	protected $_capabilities_uninstall = 'gravityforms-custom-code_uninstall';
+	protected $_capabilities_uninstall = 'gf-custom-code_uninstall';
 
 	/**
 	 * Disable async feed processing for now as it can prevent results mapped to fields from working in notifications.
@@ -153,7 +153,7 @@ class GWiz_GF_Custom_Code extends GFFeedAddOn {
 	public function init_auto_updater() {
 		// Initialize GitHub auto-updater
 		add_filter(
-			'inc2734_github_plugin_updater_plugins_api_gravitywiz/gravityforms-custom-code',
+			'inc2734_github_plugin_updater_plugins_api_gravitywiz/gf-custom-code',
 			array( $this, 'filter_auto_updater_response' ), 10, 2
 		);
 
@@ -161,14 +161,14 @@ class GWiz_GF_Custom_Code extends GFFeedAddOn {
 
 		// TODO: fix this scoper namespace issue that causes this to throw.
 		$this->updater = new GWiz_GF_Custom_Code\Dependencies\Inc2734\WP_GitHub_Plugin_Updater\Bootstrap(
-			plugin_basename( plugin_dir_path( __FILE__ ) . 'gravityforms-custom-code.php' ),
+			plugin_basename( plugin_dir_path( __FILE__ ) . 'gf-custom-code.php' ),
 			'gravitywiz',
-			'gravityforms-custom-code',
+			'gf-custom-code',
 			array(
-				'description_url' => 'https://raw.githubusercontent.com/gravitywiz/gravityforms-custom-code/master/readme.md',
-				'changelog_url'   => 'https://raw.githubusercontent.com/gravitywiz/gravityforms-custom-code/master/changelog.txt',
+				'description_url' => 'https://raw.githubusercontent.com/gravitywiz/gf-custom-code/master/readme.md',
+				'changelog_url'   => 'https://raw.githubusercontent.com/gravitywiz/gf-custom-code/master/changelog.txt',
 				'icons'           => array(
-					'svg' => 'https://raw.githubusercontent.com/gravitywiz/gravityforms-custom-code/master/icon.svg',
+					'svg' => 'https://raw.githubusercontent.com/gravitywiz/gf-custom-code/master/icon.svg',
 				),
 				'banners'         => array(
 					'low' => 'https://gravitywiz.com/wp-content/uploads/2022/12/gfoai-by-dalle-1.png',
@@ -205,7 +205,7 @@ class GWiz_GF_Custom_Code extends GFFeedAddOn {
 			unset( $obj->active_installs );
 		}
 
-		$obj->homepage = 'https://gravitywiz.com/gravity-forms-custom-code/';
+		$obj->homepage = 'https://gravitywiz.com/gf-custom-code/';
 		$obj->author   = '<a href="https://gravitywiz.com/" target="_blank">Gravity Wiz</a>';
 
 		$parsedown = new GWiz_GF_Custom_Code\Dependencies\Parsedown();
@@ -244,14 +244,18 @@ class GWiz_GF_Custom_Code extends GFFeedAddOn {
 			add_action( 'gform_post_save_feed_settings', array( $this, 'save_custom_code_settings' ), 10, 4 );
 			add_filter( 'gform_noconflict_scripts', array( $this, 'noconflict_scripts' ) );
 			add_filter( 'gform_noconflict_styles', array( $this, 'noconflict_styles' ) );
+
+			add_action( 'admin_notices', array( $this, 'maybe_display_custom_js_warning' ) );
+
 		}
 
-		add_filter( 'gform_register_init_scripts', array( $this, 'register_init_script' ), 99 );
+		add_filter( 'gform_register_init_scripts', array( $this, 'register_init_scripts' ), 99, 1 );
+		add_filter( 'gform_register_init_scripts', array( $this, 'maybe_register_custom_js_scripts_first' ), 100, 1 );
 		add_filter( 'gform_get_form_filter', array( $this, 'add_custom_css' ), 10, 2 );
 	}
 
 	public function enqueue_editor_script() {
-		if ( GFForms::get_page() !== 'form_settings_gravityforms-custom-code' ) {
+		if ( GFForms::get_page() !== 'form_settings_gf-custom-code' ) {
 			return;
 		}
 
@@ -285,7 +289,7 @@ class GWiz_GF_Custom_Code extends GFFeedAddOn {
 		GFAPI::update_form( $form );
 	}
 
-	public function register_init_script( $form ) {
+	public function register_init_scripts( $form ) {
 		if ( ! $this->is_applicable_form( $form ) ) {
 			return;
 		}
@@ -302,6 +306,39 @@ class GWiz_GF_Custom_Code extends GFFeedAddOn {
 		$slug = "{$this->_slug}_{$form['id']}";
 
 		GFFormDisplay::add_init_script( $form['id'], $slug, GFFormDisplay::ON_PAGE_RENDER, $script );
+	}
+
+	public function maybe_register_custom_js_scripts_first( $form ) {
+		/**
+		 * Filters whether to load the custom JS before other scripts.
+		 *
+		 * This is useful as some perks (e.g. Copy Cat, Address Autocomplete)
+		 * allow their initialization options to be filtered, but the Custom JS
+		 * plugin outputs its scripts too late. This change registers (and consequently
+		 * loads the GF Custom Code Javascript scripts first.
+		 *
+		 * @param bool $should_load_register_custom_js_first Whether to load the custom JS before other scripts.
+		 * @param array $form The form object.
+		 */
+		if ( ! apply_filters( 'gwiz_gf_custom_code_load_register_custom_js_first', true, $form ) ) {
+			return;
+		}
+
+		$scripts = rgar( GFFormDisplay::$init_scripts, $form['id'] );
+		if ( empty( $scripts ) ) {
+			return;
+		}
+
+		$filtered = array();
+		foreach ( $scripts as $slug => $script ) {
+			if ( strpos( $slug, $this->_slug ) === 0 ) {
+				$filtered = array( $slug => $script ) + $filtered;
+			} else {
+				$filtered[ $slug ] = $script;
+			}
+		}
+
+		GFFormDisplay::$init_scripts[ $form['id'] ] = $filtered;
 	}
 
 	public function add_custom_css( $form_string, $form ) {
@@ -353,9 +390,9 @@ class GWiz_GF_Custom_Code extends GFFeedAddOn {
 				'title'  => 'JavaScript',
 				'fields' => array(
 					array(
-						'name'          => 'custom_js',
-						'type'          => 'editor_js',
-						'callback'      => function ( $setting ) use ( $form ) {
+						'name'     => 'custom_js',
+						'type'     => 'editor_js',
+						'callback' => function ( $setting ) use ( $form ) {
 							return $this->render_custom_js_setting( $form );
 						},
 					),
@@ -365,9 +402,9 @@ class GWiz_GF_Custom_Code extends GFFeedAddOn {
 				'title'  => 'CSS',
 				'fields' => array(
 					array(
-						'name'          => 'custom_css',
-						'type'          => 'editor_css',
-						'callback'      => function ( $setting ) use ( $form ) {
+						'name'     => 'custom_css',
+						'type'     => 'editor_css',
+						'callback' => function ( $setting ) use ( $form ) {
 							return $this->render_custom_css_setting( $form );
 						},
 					),
@@ -526,6 +563,26 @@ EOT;
 			}
 
 			GFAPI::update_form( $form );
+		}
+	}
+
+	public function maybe_display_custom_js_warning() {
+		$custom_js_file_name = 'gw-gravity-forms-custom-js.php';
+		if (
+			is_plugin_active( $custom_js_file_name )
+			|| class_exists( 'GF_Custom_JS' )
+		) {
+			echo '<div class="notice notice-warning is-dismissible">';
+			/* translators: %s: <b> opening HTML tag, %s </b> closing HTML tag */
+			echo '<p>' . __( sprintf(
+				'Warning: %sGravity Forms Custom Javascript%s is currently active.', '<b>', '</b>' ),
+				'gf-custom-code'
+			) . '</p>';
+			echo '<p>' . __(
+				'Enabling this at the same time as GF Custom Code at the same time may result in custom Javascript loading twice in your form.',
+				'gw-custom-code'
+			) . '</p>';
+			echo '</div>';
 		}
 	}
 }

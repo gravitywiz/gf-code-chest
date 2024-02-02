@@ -2,19 +2,19 @@
 /**
  * Plugin Name: Gravity Forms Custom Code
  * Description: Pair the magic of Custom Code's robust models with Gravity Forms' flexibility.
- * Plugin URI: https://gravitywiz.com/gravity-forms-custom-code/
- * Version: 1.0-beta-1.8
+ * Plugin URI: https://gravitywiz.com/gf-custom-code/
+ * Version: 1.0.0
  * Author: Gravity Wiz
  * Author URI: https://gravitywiz.com/
  * License: GPL2
- * Text Domain: gravityforms-custom-code
+ * Text Domain: gf-custom-code
  * Domain Path: /languages
  *
- * @package gravityforms-custom-code
+ * @package gf-custom-code
  * @copyright Copyright (c) 2022, Gravity Wiz, LLC
  * @author Gravity Wiz <support@gravitywiz.com>
  * @license GPLv2
- * @link https://github.com/gravitywiz/gravityforms-custom-code
+ * @link https://github.com/gravitywiz/gf-custom-code
  */
 
 define( 'GWIZ_GF_CUSTOM_CODE_VERSION', '1.0.0' );
