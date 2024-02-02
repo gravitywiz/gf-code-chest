@@ -93,8 +93,7 @@ class GWiz_GF_Custom_Code extends GFFeedAddOn {
 	 * Give the form settings and plugin settings panels a nice shiny icon.
 	 */
 	public function get_menu_icon() {
-		// TODO update
-		return $this->get_base_url() . '/icon.svg';
+		return 'dashicons-editor-code';
 	}
 
 	/**
@@ -168,7 +167,9 @@ class GWiz_GF_Custom_Code extends GFFeedAddOn {
 				'description_url' => 'https://raw.githubusercontent.com/gravitywiz/gf-custom-code/master/readme.md',
 				'changelog_url'   => 'https://raw.githubusercontent.com/gravitywiz/gf-custom-code/master/changelog.txt',
 				'icons'           => array(
-					'svg' => 'https://raw.githubusercontent.com/gravitywiz/gf-custom-code/master/icon.svg',
+					// TODO make sure this dashicon id string works correctly:
+					'dashicon-editor-code'
+					// 'svg' => 'https://raw.githubusercontent.com/gravitywiz/gf-custom-code/master/icon.svg',
 				),
 				'banners'         => array(
 					'low' => 'https://gravitywiz.com/wp-content/uploads/2022/12/gfoai-by-dalle-1.png',
