@@ -250,9 +250,12 @@ class GWiz_GF_Custom_Code extends GFFeedAddOn {
 
 		}
 
-		add_filter( 'gform_register_init_scripts', array( $this, 'register_init_scripts' ), 99, 1 );
+		add_filter( 'gform_register_init_scripts', array( $this, 'register_init_script' ), 99, 1 );
 		add_filter( 'gform_register_init_scripts', array( $this, 'maybe_register_custom_js_scripts_first' ), 100, 1 );
-		add_filter( 'gform_register_init_scripts', array( $this, 'maybe_remove_legacy_custom_js_scripts' ), 100, 1 );
+		/**
+		 * 101 so that this fires after the legacy Custom JS plugin action callbacks have been registered.
+		 */
+		add_filter( 'gform_register_init_scripts', array( $this, 'maybe_unhook_legacy_custom_js' ), 101, 1 );
 		/**
 		 * must come after other gform_register_init_scripts callbacks as this needs to be the last registered
 		 * script so that the action runs only after all other scripts have been loaded.
@@ -296,7 +299,7 @@ class GWiz_GF_Custom_Code extends GFFeedAddOn {
 		GFAPI::update_form( $form );
 	}
 
-	public function register_init_scripts( $form ) {
+	public function register_init_script( $form ) {
 		if ( ! $this->is_applicable_form( $form ) ) {
 			return;
 		}
@@ -309,6 +312,13 @@ class GWiz_GF_Custom_Code extends GFFeedAddOn {
 		$script = html_entity_decode( str_replace( array_keys( $allowed_entities ), $allowed_entities, $this->get_custom_js( $form ) ) );
 		$script = str_replace( 'GFFORMID', $form['id'], $script );
 		$script = '( function( $ ) { ' . $script . ' } )( jQuery );';
+		/**
+		 * Add a newline plus whitespace in case the final line of user added
+		 * JS is a comment. This prevents the comment from effecting other scripts
+		 * that may come later. In other words, the newline will "push" any subsequent
+		 * scripts to a newline so that the comment line does not effect it.
+		*/
+		$script = $script . "\n";
 
 		$slug = "{$this->_slug}_{$form['id']}";
 
@@ -366,31 +376,14 @@ class GWiz_GF_Custom_Code extends GFFeedAddOn {
 		GFFormDisplay::$init_scripts[ $form['id'] ] = $filtered;
 	}
 
-	public function maybe_remove_legacy_custom_js_scripts( $form ) {
-		/**
-		 * Whether or not to remove legacy Custom JS plugin scripts from the
-		 * registration list.
-		 *
-		 * @param bool $should_remove_legacy_custom_js_scripts Whether to remove legacy Custom JS plugin scripts from the registration list.
-		 * @param array $form The form object.
-		 */
-		if ( ! apply_filters( 'should_remove_legacy_custom_js_scripts', true, $form ) ) {
+	public function maybe_unhook_legacy_custom_js( $form ) {
+		if ( ! class_exists( 'GF_Custom_JS' ) ) {
 			return;
 		}
 
-		$scripts = rgar( GFFormDisplay::$init_scripts, $form['id'] );
-		if ( empty( $scripts ) ) {
-			return;
-		}
+		$gf_custom_js_instance = GF_Custom_JS::get_instance();
 
-		$filtered = array();
-		foreach ( $scripts as $slug => $script ) {
-			if ( strpos( $slug, 'gf_custom_js' ) === false ) {
-				$filtered[ $slug ] = $script;
-			}
-		}
-
-		GFFormDisplay::$init_scripts[ $form['id'] ] = $filtered;
+		remove_filter( 'gform_register_init_scripts', array( $gf_custom_js_instance, 'register_init_script' ), 99 );
 	}
 
 	public function add_custom_css( $form_string, $form ) {
