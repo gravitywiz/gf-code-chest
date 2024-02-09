@@ -248,6 +248,17 @@ class GWiz_GF_Code_Chest extends GFFeedAddOn {
 
 			add_action( 'admin_notices', array( $this, 'maybe_display_custom_js_warning' ) );
 
+			if ( version_compare( GFForms::$version, '2.5', '>=' ) ) {
+				// 11 so that this comes right after and can override the legacy Custom JS plugin setting config.
+				add_filter( 'gform_form_settings_fields', array( $this, 'replace_custom_js_setting' ), 11, 2 );
+			} else {
+				// TODO test this with an old version of GF.
+				// TODO test this with an old version of GF.
+				// TODO test this with an old version of GF.
+
+				// 11 so that this comes right after and can override the legacy Custom JS plugin setting config.
+				add_filter( 'gform_form_settings', array( $this, 'replace_custom_js_setting' ), 11, 2 );
+			}
 		}
 
 		add_filter( 'gform_register_init_scripts', array( $this, 'register_init_script' ), 99, 1 );
@@ -647,6 +658,38 @@ EOT;
 			) . '</p>';
 			echo '</div>';
 		}
+	}
+
+	public function replace_custom_js_setting( $form_settings, $form ) {
+		$form_settings['Custom Code'] = array(
+			'title'  => esc_html__( 'Custom Code' ),
+			'fields' => array(
+				array(
+					'name'     => 'custom_js',
+					'type'     => 'editor_js',
+					'callback' => function ( $setting ) use ( $form ) {
+						$form_id = $form['id'];
+						return <<<EOT
+							<div
+								id="gform_setting_custom_js_overridden_warning"
+								class="gform-settings-field gform-settings-field__html"
+							>
+								Custom Code is managed through the Code Chest page when <b>GF Code Chest</b> is active.<br><br>
+								<a
+									href="/wp-admin/admin.php?subview=gf-code-chest&page=gf_edit_forms&id=$form_id&view=settings"
+									class="gform-button
+									gform-button--white"
+								>
+									Go To Code Chest Settings
+								</a>
+							</div>
+						EOT;
+					},
+				),
+			),
+		);
+
+		return $form_settings;
 	}
 
 
