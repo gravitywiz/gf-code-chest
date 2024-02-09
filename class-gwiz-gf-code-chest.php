@@ -1,36 +1,36 @@
 <?php
 /**
- * @package gf-custom-code
+ * @package gf-code-chest
  * @copyright Copyright (c) 2022, Gravity Wiz, LLC
  * @author Gravity Wiz <support@gravitywiz.com>
  * @license GPLv2
- * @link https://github.com/gravitywiz/gf-custom-code
+ * @link https://github.com/gravitywiz/gf-code-chest
  */
 defined( 'ABSPATH' ) || die();
 
 GFForms::include_feed_addon_framework();
 
-class GWiz_GF_Custom_Code extends GFFeedAddOn {
+class GWiz_GF_Code_Chest extends GFFeedAddOn {
 
 	// TODO REMOVE
 	public $default_settings = array();
 
 	/**
-	 * @var GWiz_GF_Custom_Code\Dependencies\Inc2734\WP_GitHub_Plugin_Updater\Bootstrap The updater instance.
+	 * @var GWiz_GF_Code_Chest\Dependencies\Inc2734\WP_GitHub_Plugin_Updater\Bootstrap The updater instance.
 	 */
 	public $updater;
 
 	/**
-	 * @var null|GWiz_GF_Custom_Code
+	 * @var null|GWiz_GF_Code_Chest
 	 */
 	private static $instance = null;
 
-	protected $_version        = GWIZ_GF_CUSTOM_CODE_VERSION;
-	protected $_path           = 'gf-custom-code/gf-custom-code.php';
+	protected $_version        = GWIZ_GF_CODE_CHEST_VERSION;
+	protected $_path           = 'gf-code-chest/gf-code-chest.php';
 	protected $_full_path      = __FILE__;
-	protected $_slug           = 'gf-custom-code';
-	protected $_title          = 'Gravity Forms Custom Code';
-	protected $_short_title    = 'Custom Code';
+	protected $_slug           = 'gf-code-chest';
+	protected $_title          = 'Gravity Forms Code Chest';
+	protected $_short_title    = 'Code Chest';
 	protected $_multiple_feeds = false;
 
 	/**
@@ -40,10 +40,10 @@ class GWiz_GF_Custom_Code extends GFFeedAddOn {
 	 */
 	protected $_capabilities = array(
 		'gf-cvustom-code',
-		'gf-custom-code_uninstall',
-		'gf-custom-code_results',
-		'gf-custom-code_settings',
-		'gf-custom-code_form_settings',
+		'gf-code-chest_uninstall',
+		'gf-code-chest_results',
+		'gf-code-chest_settings',
+		'gf-code-chest_form_settings',
 	);
 
 	/**
@@ -51,21 +51,21 @@ class GWiz_GF_Custom_Code extends GFFeedAddOn {
 	 *
 	 * @var string $_capabilities_settings_page The capability needed to access the Add-On settings page.
 	 */
-	protected $_capabilities_settings_page = 'gf-custom-code_settings';
+	protected $_capabilities_settings_page = 'gf-code-chest_settings';
 
 	/**
 	 * Defines the capability needed to access the Add-On form settings page.
 	 *
 	 * @var string $_capabilities_form_settings The capability needed to access the Add-On form settings page.
 	 */
-	protected $_capabilities_form_settings = 'gf-custom-code_form_settings';
+	protected $_capabilities_form_settings = 'gf-code-chest_form_settings';
 
 	/**
 	 * Defines the capability needed to uninstall the Add-On.
 	 *
 	 * @var string $_capabilities_uninstall The capability needed to uninstall the Add-On.
 	 */
-	protected $_capabilities_uninstall = 'gf-custom-code_uninstall';
+	protected $_capabilities_uninstall = 'gf-code-chest_uninstall';
 
 	/**
 	 * Disable async feed processing for now as it can prevent results mapped to fields from working in notifications.
@@ -137,7 +137,7 @@ class GWiz_GF_Custom_Code extends GFFeedAddOn {
 
 		spl_autoload_register(
 			function ( $class ) use ( $class_map ) {
-				if ( isset( $class_map[ $class ] ) && substr( $class, 0, 27 ) === 'GWiz_GF_Custom_Code\\Dependencies' ) {
+				if ( isset( $class_map[ $class ] ) && substr( $class, 0, 27 ) === 'GWiz_GF_Code_Chest\\Dependencies' ) {
 					require_once $class_map[ $class ];
 				}
 			},
@@ -152,24 +152,24 @@ class GWiz_GF_Custom_Code extends GFFeedAddOn {
 	public function init_auto_updater() {
 		// Initialize GitHub auto-updater
 		add_filter(
-			'inc2734_github_plugin_updater_plugins_api_gravitywiz/gf-custom-code',
+			'inc2734_github_plugin_updater_plugins_api_gravitywiz/gf-code-chest',
 			array( $this, 'filter_auto_updater_response' ), 10, 2
 		);
 
 		return;
 
 		// TODO: fix this scoper namespace issue that causes this to throw.
-		$this->updater = new GWiz_GF_Custom_Code\Dependencies\Inc2734\WP_GitHub_Plugin_Updater\Bootstrap(
-			plugin_basename( plugin_dir_path( __FILE__ ) . 'gf-custom-code.php' ),
+		$this->updater = new GWiz_GF_Code_Chest\Dependencies\Inc2734\WP_GitHub_Plugin_Updater\Bootstrap(
+			plugin_basename( plugin_dir_path( __FILE__ ) . 'gf-code-chest.php' ),
 			'gravitywiz',
-			'gf-custom-code',
+			'gf-code-chest',
 			array(
-				'description_url' => 'https://raw.githubusercontent.com/gravitywiz/gf-custom-code/master/readme.md',
-				'changelog_url'   => 'https://raw.githubusercontent.com/gravitywiz/gf-custom-code/master/changelog.txt',
+				'description_url' => 'https://raw.githubusercontent.com/gravitywiz/gf-code-chest/master/readme.md',
+				'changelog_url'   => 'https://raw.githubusercontent.com/gravitywiz/gf-code-chest/master/changelog.txt',
 				'icons'           => array(
 					// TODO make sure this dashicon id string works correctly:
 					'dashicon-editor-code',
-					// 'svg' => 'https://raw.githubusercontent.com/gravitywiz/gf-custom-code/master/icon.svg',
+					// 'svg' => 'https://raw.githubusercontent.com/gravitywiz/gf-code-chest/master/icon.svg',
 				),
 				'banners'         => array(
 					'low' => 'https://gravitywiz.com/wp-content/uploads/2022/12/gfoai-by-dalle-1.png',
@@ -206,10 +206,10 @@ class GWiz_GF_Custom_Code extends GFFeedAddOn {
 			unset( $obj->active_installs );
 		}
 
-		$obj->homepage = 'https://gravitywiz.com/gf-custom-code/';
+		$obj->homepage = 'https://gravitywiz.com/gf-code-chest/';
 		$obj->author   = '<a href="https://gravitywiz.com/" target="_blank">Gravity Wiz</a>';
 
-		$parsedown = new GWiz_GF_Custom_Code\Dependencies\Parsedown();
+		$parsedown = new GWiz_GF_Code_Chest\Dependencies\Parsedown();
 		$changelog = trim( $obj->sections['changelog'] );
 
 		// Remove the "Changelog" h1.
@@ -242,7 +242,7 @@ class GWiz_GF_Custom_Code extends GFFeedAddOn {
 		if ( current_user_can( 'administrator' ) ) {
 			add_filter( 'gform_tooltips', array( $this, 'tooltips' ) );
 			add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_editor_script' ) );
-			add_action( 'gform_post_save_feed_settings', array( $this, 'save_custom_code_settings' ), 10, 4 );
+			add_action( 'gform_post_save_feed_settings', array( $this, 'save_code_chest_settings' ), 10, 4 );
 			add_filter( 'gform_noconflict_scripts', array( $this, 'noconflict_scripts' ) );
 			add_filter( 'gform_noconflict_styles', array( $this, 'noconflict_styles' ) );
 
@@ -265,7 +265,7 @@ class GWiz_GF_Custom_Code extends GFFeedAddOn {
 	}
 
 	public function enqueue_editor_script() {
-		if ( GFForms::get_page() !== 'form_settings_gf-custom-code' ) {
+		if ( GFForms::get_page() !== 'form_settings_gf-code-chest' ) {
 			return;
 		}
 
@@ -290,13 +290,13 @@ class GWiz_GF_Custom_Code extends GFFeedAddOn {
 		$scripts[] = 'wp-codemirror';
 		return $scripts;
 	}
-	public function save_custom_code_settings( $feed_id, $form_id, $settings, $feed_addon_instance ) {
+	public function save_code_chest_settings( $feed_id, $form_id, $settings, $feed_addon_instance ) {
 		$form = GFAPI::get_form( $form_id );
 
 		$form['custom_js']                     = esc_html( rgpost( 'custom_js' ) );
 		$form['custom_css']                    = esc_html( rgpost( 'custom_css' ) );
 		// TODO: there must be a better way to do this (e.g. automatically handled by GF 🤔🤔🤔).
-		$form['custom_code_scope_css_to_form'] = rgpost( '_gform_setting_custom_code_scope_css_to_form' ) === '1' ? true : false;
+		$form['code_chest_scope_css_to_form'] = rgpost( '_gform_setting_code_chest_scope_css_to_form' ) === '1' ? true : false;
 
 		GFAPI::update_form( $form );
 	}
@@ -335,7 +335,7 @@ class GWiz_GF_Custom_Code extends GFFeedAddOn {
 		$form_id = $form['id'];
 		$slug    = "{$this->_slug}_deferred_action_{$form['id']}";
 		/**
-		 * This action is fired after all other Custom Code scripts have been loaded
+		 * This action is fired after all other Code Chest scripts have been loaded
 		 * and ran in the browser.
 		 *
 		 * @param string|int $form_id The ID of the form.
@@ -352,12 +352,12 @@ class GWiz_GF_Custom_Code extends GFFeedAddOn {
 		 * This is useful as some perks (e.g. Copy Cat, Address Autocomplete)
 		 * allow their initialization options to be filtered, but the Custom JS
 		 * plugin outputs its scripts too late. This change registers (and consequently
-		 * loads the GF Custom Code Javascript scripts first.
+		 * loads the GF Code Chest Javascript scripts first.
 		 *
 		 * @param bool $should_load_register_custom_js_first Whether to load the custom JS before other scripts.
 		 * @param array $form The form object.
 		 */
-		if ( ! apply_filters( 'gwiz_gf_custom_code_load_register_custom_js_first', true, $form ) ) {
+		if ( ! apply_filters( 'gwiz_gf_code_chest_load_register_custom_js_first', true, $form ) ) {
 			return;
 		}
 
@@ -396,7 +396,7 @@ class GWiz_GF_Custom_Code extends GFFeedAddOn {
 		// check explicity if not set to false as the default value is "true"
 		// and unset value, empty string, etc. implies that the user has not
 		// explicity changed this.
-		if ( rgar( $form, 'custom_code_scope_css_to_form' ) !== false ) {
+		if ( rgar( $form, 'code_chest_scope_css_to_form' ) !== false ) {
 			// alternatively this could be scoped to the form element with `#gform_FORMID`
 			$prefix     = '#gform_wrapper_' . $form['id'];
 			$custom_css = $this->prefix_css_selectors( $custom_css, $prefix );
@@ -465,10 +465,10 @@ class GWiz_GF_Custom_Code extends GFFeedAddOn {
 						},
 					),
 					array(
-						'name'          => 'custom_code_scope_css_to_form',
+						'name'          => 'code_chest_scope_css_to_form',
 						'type'          => 'toggle',
-						'label'         => __( 'Scope CSS to this form only', 'gw-custom-code' ),
-						'tooltip'       => __( 'When enabled, the custom CSS will only be applied to this form. This works by adding "#gform_wrapper_GFFORMID" before all detected selectors.', 'gw-custom-code' ),
+						'label'         => __( 'Scope CSS to this form only', 'gw-code-chest' ),
+						'tooltip'       => __( 'When enabled, the custom CSS will only be applied to this form. This works by adding "#gform_wrapper_GFFORMID" before all detected selectors.', 'gw-code-chest' ),
 						'default_value' => true,
 					),
 				),
@@ -580,14 +580,14 @@ EOT;
 	}
 
 	/**
-	 * Export Custom Code Add-On feed when exporting forms.
+	 * Export Code Chest Add-On feed when exporting forms.
 	 *
 	 * @param array $form The current form being exported.
 	 *
 	 * @return array
 	 */
 	public function export_feeds_with_form( $form ) {
-		// TODO export the custom code feed if it exists (make sure this works)
+		// TODO export the code chest feed if it exists (make sure this works)
 		$feeds = $this->get_feeds( $form['id'] );
 
 		if ( ! isset( $form['feeds'] ) ) {
@@ -600,12 +600,12 @@ EOT;
 	}
 
 	/**
-	 * Import Custom Code Add-On feed when importing forms.
+	 * Import Code Chest Add-On feed when importing forms.
 	 *
 	 * @param array $forms Imported forms.
 	 */
 	public function import_feeds_with_form( $forms ) {
-		// TODO import the custom code feed if it exists. (make sure this works)
+		// TODO import the code chest feed if it exists. (make sure this works)
 		foreach ( $forms as $import_form ) {
 			// Ensure the imported form is the latest.
 			$form = GFAPI::get_form( $import_form['id'] );
@@ -639,11 +639,11 @@ EOT;
 			/* translators: %s: <b> opening HTML tag, %s </b> closing HTML tag */
 			echo '<p>' . __( sprintf(
 				'Warning: %sGravity Forms Custom Javascript%s is currently active.', '<b>', '</b>' ),
-				'gf-custom-code'
+				'gf-code-chest'
 			) . '</p>';
 			echo '<p>' . __(
-				'Enabling this at the same time as GF Custom Code at the same time may result in custom Javascript loading twice in your form.',
-				'gw-custom-code'
+				'Enabling this at the same time as GF Code Chest at the same time may result in custom Javascript loading twice in your form.',
+				'gw-code-chest'
 			) . '</p>';
 			echo '</div>';
 		}

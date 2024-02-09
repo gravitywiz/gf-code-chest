@@ -1,4 +1,4 @@
-# Gravity Forms Custom Code
+# Gravity Forms Code Chest
 
 _by [Gravity Wiz](https://gravitywiz.com)_
 
@@ -6,7 +6,7 @@ Effortlessly add custom Javascript and CSS to your forms ✨.
 
 ## Usage
 
-See our [blog post](https://gravitywiz.com/gravity-forms-custom-code/) for usage information and more details.
+See our [blog post](https://gravitywiz.com/gravity-forms-code-chest/) for usage information and more details.
 
 ## License
 

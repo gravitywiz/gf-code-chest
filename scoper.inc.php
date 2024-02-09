@@ -12,7 +12,7 @@ $wp_functions = json_decode( file_get_contents( dirname( __FILE__ ) . '/php-scop
 $wp_constants = json_decode( file_get_contents( dirname( __FILE__ ) . '/php-scoper/vendor/sniccowp/php-scoper-wordpress-excludes/generated/exclude-wordpress-constants.json' ), true );
 
 return array(
-	'prefix'            => 'GWiz_GF_Custom_Code\\Dependencies',
+	'prefix'            => 'GWiz_GF_Code_Chest\\Dependencies',
 	'finders'           => array(
 		// General dependencies, except Google API services.
 		Finder::create()
