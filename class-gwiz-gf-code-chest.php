@@ -304,8 +304,8 @@ class GWiz_GF_Code_Chest extends GFFeedAddOn {
 	public function save_code_chest_settings( $feed_id, $form_id, $settings, $feed_addon_instance ) {
 		$form = GFAPI::get_form( $form_id );
 
-		$form['custom_js']                     = esc_html( rgpost( 'custom_js' ) );
-		$form['custom_css']                    = esc_html( rgpost( 'custom_css' ) );
+		$form['code_chest_js']  = esc_html( rgpost( 'code_chest_js' ) );
+		$form['code_chest_css'] = esc_html( rgpost( 'code_chest_css' ) );
 		// TODO: there must be a better way to do this (e.g. automatically handled by GF 🤔🤔🤔).
 		$form['code_chest_scope_css_to_form'] = rgpost( '_gform_setting_code_chest_scope_css_to_form' ) === '1' ? true : false;
 
@@ -368,7 +368,7 @@ class GWiz_GF_Code_Chest extends GFFeedAddOn {
 		 * @param bool $should_load_register_custom_js_first Whether to load the custom JS before other scripts.
 		 * @param array $form The form object.
 		 */
-		if ( ! apply_filters( 'gwiz_gf_code_chest_load_register_custom_js_first', true, $form ) ) {
+		if ( ! apply_filters( 'gwiz_gf_code_chest_register_custom_js_first', true, $form ) ) {
 			return;
 		}
 
@@ -425,12 +425,21 @@ class GWiz_GF_Code_Chest extends GFFeedAddOn {
 	}
 
 	public function get_custom_js( $form ) {
-		// TODO can we migrate fully to `custom_js`?
-		return rgar( $form, 'custom_js', rgar( $form, 'customJS' ) );
+		/**
+		 * default to settings from the legacy Custom JS plugin if
+		 * the current form has never had code chest settings saved.
+		 */
+		if ( ! isset( $form['code_chest_js'] ) ) {
+			return rgar( $form, 'custom_js', rgar( $form, 'customJS' ) );
+
+		}
+
+		return rgar( $form, 'code_chest_js' );
+
 	}
 
 	public function get_custom_css( $form ) {
-		return rgar( $form, 'custom_css' );
+		return rgar( $form, 'code_chest_css' );
 	}
 
 	/**
@@ -457,7 +466,7 @@ class GWiz_GF_Code_Chest extends GFFeedAddOn {
 				'title'  => 'JavaScript',
 				'fields' => array(
 					array(
-						'name'     => 'custom_js',
+						'name'     => 'code_chest_js',
 						'type'     => 'editor_js',
 						'callback' => function ( $setting ) use ( $form ) {
 							return $this->render_custom_js_setting( $form );
@@ -469,7 +478,7 @@ class GWiz_GF_Code_Chest extends GFFeedAddOn {
 				'title'  => 'CSS',
 				'fields' => array(
 					array(
-						'name'     => 'custom_css',
+						'name'     => 'code_chest_css',
 						'type'     => 'editor_css',
 						'callback' => function ( $setting ) use ( $form ) {
 							return $this->render_custom_css_setting( $form );
@@ -488,18 +497,24 @@ class GWiz_GF_Code_Chest extends GFFeedAddOn {
 	}
 
 	public function render_custom_js_setting( $form ) {
-		// GF 2.5 may fire `gform_form_settings` before `save_custom_js_setting`
-		$custom_js = $this->get_custom_js( $form );
-		$post_js   = esc_html( rgpost( 'custom_js' ) );
-		// Always favor posted JS if it's available
-		$custom_js = ( $post_js ) ? $post_js : $custom_js;
+		/**
+		 * must use isset here as an empty string value is a valid value
+		 * to save. if using rgpost, an empty string will evaluate to
+		 * `false` and then the else block will incorrectly execute.
+		 */
+		if ( isset( $_POST['code_chest_js'] ) ) {
+			$custom_js = rgpost( 'code_chest_js' );
+		} else {
+			$custom_js = $this->get_custom_js( $form );
+		}
+
 		return $this->get_code_editor_markup( 'js', $custom_js );
 	}
 
 	public function render_custom_css_setting( $form ) {
 		// GF 2.5 may fire `gform_form_settings` before `save_custom_js_setting`
 		$custom_css = $this->get_custom_css( $form );
-		$post_css   = esc_html( rgpost( 'custom_css' ) );
+		$post_css   = esc_html( rgpost( 'code_chest_css' ) );
 		// Always favor posted JS if it's available
 		$custom_css = ( $post_css ) ? $post_css : $custom_css;
 		return $this->get_code_editor_markup( 'css', $custom_css );
@@ -516,27 +531,23 @@ class GWiz_GF_Code_Chest extends GFFeedAddOn {
 		$gform_id_msg = __( 'Use <code>GFFORMID</code> to automatically set the current form ID when the code is rendered.' );
 
 		return <<<EOT
-			<tr id="custom_{$type}_setting" class="child_setting_row">
+			<tr id="code_chest_{$type}_setting" class="child_setting_row">
 				<td colspan="2">
 					<p>{$description}<br>{$gform_id_msg}</p>
-					<textarea id="custom_{$type}" name="custom_{$type}" spellcheck="false"
+					<textarea id="code_chest_{$type}" name="code_chest_{$type}" spellcheck="false"
 						style="width:100%%;height:14rem;">{$code}</textarea>
 				</td>
 			</td>
 			<script>
 				jQuery( document ).ready( function( $ ) {
-					wp.codeEditor.initialize( $( "#custom_{$type}" ), editor_settings.{$type}_code_editor );
+					wp.codeEditor.initialize( $( "#code_chest_{$type}" ), editor_settings.{$type}_code_editor );
 				} );
 			</script>
 			<style type="text/css">
 				.CodeMirror-wrap { border: 1px solid #e1e1e1; }
 			</style>
-EOT;
+		EOT;
 	}
-
-	// public function add_legacy_custom_js_setting( $settings, $form ) {
-	// 	return $settings;
-	// }
 
 	/**
 	 * Processes the feed.
@@ -649,7 +660,7 @@ EOT;
 			echo '<div class="notice notice-warning is-dismissible">';
 			/* translators: %s: <b> opening HTML tag, %s </b> closing HTML tag */
 			echo '<p>' . __( sprintf(
-				'Warning: %sGravity Forms Custom Javascript%s is currently active.', '<b>', '</b>' ),
+			'Warning: %sGravity Forms Custom Javascript%s is currently active.', '<b>', '</b>' ),
 				'gf-code-chest'
 			) . '</p>';
 			echo '<p>' . __(
@@ -665,13 +676,13 @@ EOT;
 			'title'  => esc_html__( 'Custom Code' ),
 			'fields' => array(
 				array(
-					'name'     => 'custom_js',
+					'name'     => 'code_chest_js',
 					'type'     => 'editor_js',
 					'callback' => function ( $setting ) use ( $form ) {
 						$form_id = $form['id'];
 						return <<<EOT
 							<div
-								id="gform_setting_custom_js_overridden_warning"
+								id="gform_setting_code_chest_js_overridden_warning"
 								class="gform-settings-field gform-settings-field__html"
 							>
 								Custom Code is managed through the Code Chest page when <b>GF Code Chest</b> is active.<br><br>
