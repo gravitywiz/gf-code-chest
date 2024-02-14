@@ -718,9 +718,12 @@ class GWiz_GF_Code_Chest extends GFFeedAddOn {
 		return $form_settings;
 	}
 
-
 	public function prefix_css_selectors( $css, $prefix ) {
-		return preg_replace_callback('/([^\r\n,{}]+)(,(?=[^}]*{)|\s*{)/', function( $matches ) use ( $prefix ) {
+		/**
+		 * Find all CSS selectors, but ignore all `@` rules such as @font-face, @media, etc. as they are
+		 * defined globally and not can't be scoped to a certion "parent" selector.
+		 */
+		return preg_replace_callback('/^\s*(?!@)([^\r\n,{}]+)(,(?=[^}]*{)|\s*{)/m', function( $matches ) use ( $prefix ) {
 			return $prefix . ' ' . trim( $matches[1] ) . $matches[2];
 		}, $css);
 	}
