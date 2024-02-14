@@ -236,9 +236,6 @@ class GWiz_GF_Code_Chest extends GFFeedAddOn {
 
 		load_plugin_textdomain( $this->_slug, false, basename( dirname( __file__ ) ) . '/languages/' );
 
-		// Filters/actions
-		// add_filter( 'gform_validation_message', array( $this, 'modify_validation_message' ), 15, 2 );
-
 		if ( current_user_can( 'administrator' ) ) {
 			add_filter( 'gform_tooltips', array( $this, 'tooltips' ) );
 			add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_editor_script' ) );
@@ -304,14 +301,15 @@ class GWiz_GF_Code_Chest extends GFFeedAddOn {
 		return $scripts;
 	}
 	public function save_code_chest_settings( $feed_id, $form_id, $settings, $feed_addon_instance ) {
-		$form = GFAPI::get_form( $form_id );
+		/**
+		 * Note that this must be handled manually as we (almost) completelty override the
+		 * settings form markup which apparently prevents GF from saving the settings.
+		 */
+		$settings['code_chest_js']                = esc_html( rgpost( 'code_chest_js' ) );
+		$settings['code_chest_css']               = esc_html( rgpost( 'code_chest_css' ) );
+		$settings['code_chest_scope_css_to_form'] = rgpost( '_gform_setting_code_chest_scope_css_to_form' ) === '1' ? true : false;
 
-		$form['code_chest_js']  = esc_html( rgpost( 'code_chest_js' ) );
-		$form['code_chest_css'] = esc_html( rgpost( 'code_chest_css' ) );
-		// TODO: there must be a better way to do this (e.g. automatically handled by GF 🤔🤔🤔).
-		$form['code_chest_scope_css_to_form'] = rgpost( '_gform_setting_code_chest_scope_css_to_form' ) === '1' ? true : false;
-
-		GFAPI::update_form( $form );
+		$this->update_feed_meta( $feed_id, $settings );
 	}
 
 	public function register_init_script( $form ) {
@@ -406,10 +404,12 @@ class GWiz_GF_Code_Chest extends GFFeedAddOn {
 		$custom_css = html_entity_decode( $custom_css );
 		$custom_css = str_replace( 'GFFORMID', $form['id'], $custom_css );
 
+		$settings = $this->get_settings( $form['id'] );
+
 		// check explicity if not set to false as the default value is "true"
 		// and unset value, empty string, etc. implies that the user has not
 		// explicity changed this.
-		if ( rgar( $form, 'code_chest_scope_css_to_form' ) !== false ) {
+		if ( rgar( $settings, 'code_chest_scope_css_to_form' ) !== false ) {
 			// alternatively this could be scoped to the form element with `#gform_FORMID`
 			$prefix     = '#gform_wrapper_' . $form['id'];
 			$custom_css = $this->prefix_css_selectors( $custom_css, $prefix );
@@ -426,22 +426,30 @@ class GWiz_GF_Code_Chest extends GFFeedAddOn {
 		return ! empty( $this->get_custom_js( $form ) );
 	}
 
+	public function get_settings( $form_id ) {
+		$feed_id = $this->get_default_feed_id( $form_id );
+		$feed    = $this->get_feed( $feed_id );
+		return rgar( $feed, 'meta' );
+	}
+
 	public function get_custom_js( $form ) {
+		$settings = $this->get_settings( $form['id'] );
+
 		/**
 		 * default to settings from the legacy Custom JS plugin if
 		 * the current form has never had code chest settings saved.
 		 */
-		if ( ! isset( $form['code_chest_js'] ) ) {
+		if ( ! isset( $settings['code_chest_js'] ) ) {
 			return rgar( $form, 'custom_js', rgar( $form, 'customJS' ) );
-
 		}
 
-		return rgar( $form, 'code_chest_js' );
+		return rgar( $settings, 'code_chest_js' );
 
 	}
 
 	public function get_custom_css( $form ) {
-		return rgar( $form, 'code_chest_css' );
+		$settings = $this->get_settings( $form['id'] );
+		return rgar( $settings, 'code_chest_css' );
 	}
 
 	/**
@@ -674,6 +682,11 @@ class GWiz_GF_Code_Chest extends GFFeedAddOn {
 	}
 
 	public function replace_custom_js_setting( $form_settings, $form ) {
+		// Only replace the legacy settings if the legacy plugin is currently active.
+		if ( ! rgar( $form_settings, 'Custom Code' ) ) {
+			return $form_settings;
+		}
+
 		$form_settings['Custom Code'] = array(
 			'title'  => esc_html__( 'Custom Code' ),
 			'fields' => array(
