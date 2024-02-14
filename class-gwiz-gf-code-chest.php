@@ -263,10 +263,12 @@ class GWiz_GF_Code_Chest extends GFFeedAddOn {
 
 		add_filter( 'gform_register_init_scripts', array( $this, 'register_init_script' ), 99, 1 );
 		add_filter( 'gform_register_init_scripts', array( $this, 'maybe_register_custom_js_scripts_first' ), 100, 1 );
+
 		/**
-		 * 101 so that this fires after the legacy Custom JS plugin action callbacks have been registered.
+		 * 90 so that this fires after the legacy Custom JS plugin action callbacks have been registered.
 		 */
-		add_filter( 'gform_register_init_scripts', array( $this, 'maybe_unhook_legacy_custom_js' ), 101, 1 );
+		add_filter( 'gform_register_init_scripts', array( $this, 'maybe_unhook_legacy_custom_js' ), 90, 1 );
+
 		/**
 		 * must come after other gform_register_init_scripts callbacks as this needs to be the last registered
 		 * script so that the action runs only after all other scripts have been loaded.
