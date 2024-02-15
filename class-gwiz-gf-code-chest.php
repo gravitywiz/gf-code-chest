@@ -244,17 +244,8 @@ class GWiz_GF_Code_Chest extends GFFeedAddOn {
 
 			add_action( 'admin_notices', array( $this, 'maybe_display_custom_js_warning' ) );
 
-			if ( version_compare( GFForms::$version, '2.5', '>=' ) ) {
-				// 11 so that this comes right after and can override the legacy Custom JS plugin setting config.
-				add_filter( 'gform_form_settings_fields', array( $this, 'replace_custom_js_setting' ), 11, 2 );
-			} else {
-				// TODO test this with an old version of GF.
-				// TODO test this with an old version of GF.
-				// TODO test this with an old version of GF.
-
-				// 11 so that this comes right after and can override the legacy Custom JS plugin setting config.
-				add_filter( 'gform_form_settings', array( $this, 'replace_custom_js_setting' ), 11, 2 );
-			}
+			// 11 so that this comes right after and can override the legacy Custom JS plugin setting config.
+			add_filter( 'gform_form_settings_fields', array( $this, 'replace_custom_js_setting' ), 11, 2 );
 		}
 
 		add_filter( 'gform_register_init_scripts', array( $this, 'register_init_script' ), 99, 1 );
