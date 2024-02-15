@@ -137,7 +137,8 @@ class GWiz_GF_Code_Chest extends GFFeedAddOn {
 
 		spl_autoload_register(
 			function ( $class ) use ( $class_map ) {
-				if ( isset( $class_map[ $class ] ) && substr( $class, 0, 27 ) === 'GWiz_GF_Code_Chest\\Dependencies' ) {
+				$namespace = 'GWiz_GF_Code_Chest\\Dependencies';
+				if ( isset( $class_map[ $class ] ) && substr( $class, 0, strlen( $namespace ) ) === $namespace ) {
 					require_once $class_map[ $class ];
 				}
 			},
@@ -156,22 +157,20 @@ class GWiz_GF_Code_Chest extends GFFeedAddOn {
 			array( $this, 'filter_auto_updater_response' ), 10, 2
 		);
 
-		return;
-
-		// TODO: fix this scoper namespace issue that causes this to throw.
 		$this->updater = new GWiz_GF_Code_Chest\Dependencies\Inc2734\WP_GitHub_Plugin_Updater\Bootstrap(
 			plugin_basename( plugin_dir_path( __FILE__ ) . 'gf-code-chest.php' ),
 			'gravitywiz',
 			'gf-code-chest',
 			array(
-				'description_url' => 'https://raw.githubusercontent.com/gravitywiz/gf-code-chest/master/readme.md',
-				'changelog_url'   => 'https://raw.githubusercontent.com/gravitywiz/gf-code-chest/master/changelog.txt',
+				'description_url' => 'https://raw.githubusercontent.com/gravitywiz/gf-code-chest/main/readme.md',
+				'changelog_url'   => 'https://raw.githubusercontent.com/gravitywiz/gf-code-chest/main/changelog.txt',
 				'icons'           => array(
 					// TODO make sure this dashicon id string works correctly:
 					'dashicon-editor-code',
 					// 'svg' => 'https://raw.githubusercontent.com/gravitywiz/gf-code-chest/master/icon.svg',
 				),
 				'banners'         => array(
+					// TODO update this
 					'low' => 'https://gravitywiz.com/wp-content/uploads/2022/12/gfoai-by-dalle-1.png',
 				),
 				'requires_php'    => '5.6.0',
