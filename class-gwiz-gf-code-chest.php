@@ -11,10 +11,6 @@ defined( 'ABSPATH' ) || die();
 GFForms::include_feed_addon_framework();
 
 class GWiz_GF_Code_Chest extends GFFeedAddOn {
-
-	// TODO REMOVE
-	public $default_settings = array();
-
 	/**
 	 * @var GWiz_GF_Code_Chest\Dependencies\Inc2734\WP_GitHub_Plugin_Updater\Bootstrap The updater instance.
 	 */
@@ -121,9 +117,7 @@ class GWiz_GF_Code_Chest extends GFFeedAddOn {
 		$this->setup_autoload();
 		$this->init_auto_updater();
 
-		// TODO is this needed?
 		add_filter( 'gform_export_form', array( $this, 'export_feeds_with_form' ) );
-		// TODO is this needed?
 		add_action( 'gform_forms_post_import', array( $this, 'import_feeds_with_form' ) );
 	}
 
@@ -453,11 +447,6 @@ class GWiz_GF_Code_Chest extends GFFeedAddOn {
 		return $tooltips;
 	}
 
-	public function can_duplicate_feed( $feed_id ) {
-		// TODO: this might need to be false
-		return false;
-	}
-
 	public function feed_settings_fields() {
 		$form_id = rgget( 'id' );
 		$form    = GFAPI::get_form( $form_id );
@@ -546,21 +535,7 @@ class GWiz_GF_Code_Chest extends GFFeedAddOn {
 			<style type="text/css">
 				.CodeMirror-wrap { border: 1px solid #e1e1e1; }
 			</style>
-		EOT;
-	}
-
-	/**
-	 * Processes the feed.
-	 *
-	 * @param array $feed
-	 * @param array $entry
-	 * @param array $form
-	 *
-	 * @return array|void|null
-	 */
-	public function process_feed( $feed, $entry, $form ) {
-		// TODO is this needed?
-		return $entry;
+EOT;
 	}
 
 	/**
@@ -609,7 +584,6 @@ class GWiz_GF_Code_Chest extends GFFeedAddOn {
 	 * @return array
 	 */
 	public function export_feeds_with_form( $form ) {
-		// TODO export the code chest feed if it exists (make sure this works)
 		$feeds = $this->get_feeds( $form['id'] );
 
 		if ( ! isset( $form['feeds'] ) ) {
@@ -627,7 +601,6 @@ class GWiz_GF_Code_Chest extends GFFeedAddOn {
 	 * @param array $forms Imported forms.
 	 */
 	public function import_feeds_with_form( $forms ) {
-		// TODO import the code chest feed if it exists. (make sure this works)
 		foreach ( $forms as $import_form ) {
 			// Ensure the imported form is the latest.
 			$form = GFAPI::get_form( $import_form['id'] );
