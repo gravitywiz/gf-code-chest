@@ -117,6 +117,9 @@ class GWiz_GF_Code_Chest extends GFFeedAddOn {
 		$this->setup_autoload();
 		$this->init_auto_updater();
 
+		/**
+		 * Hooks for exporting and importing feeds with forms.
+		 */
 		add_filter( 'gform_export_form', array( $this, 'export_feeds_with_form' ) );
 		add_action( 'gform_forms_post_import', array( $this, 'import_feeds_with_form' ) );
 	}
@@ -254,6 +257,11 @@ class GWiz_GF_Code_Chest extends GFFeedAddOn {
 		 */
 		add_filter( 'gform_register_init_scripts', array( $this, 'register_gfcc_deferred_action_script' ), 101, 1 );
 		add_filter( 'gform_form_after_open', array( $this, 'add_custom_css' ), 10, 2 );
+
+		/**
+		 * Hook for duplicating form feeds when duplicating a form.
+		 */
+		add_action( 'gform_post_form_duplicated', array( $this, 'duplicate_form_feeds' ), 10, 2 );
 	}
 
 	public function enqueue_editor_script() {
@@ -282,6 +290,7 @@ class GWiz_GF_Code_Chest extends GFFeedAddOn {
 		$scripts[] = 'wp-codemirror';
 		return $scripts;
 	}
+
 	public function save_code_chest_settings( $feed_id, $form_id, $settings, $feed_addon_instance ) {
 		/**
 		 * Note that this must be handled manually as we (almost) completelty override the
@@ -620,6 +629,13 @@ EOT;
 
 			GFAPI::update_form( $form );
 		}
+	}
+
+	public function duplicate_form_feeds( $form_id, $new_form_id ) {
+		$src_feeds = $this->get_feeds( $form_id );
+		$copy_feed = $src_feeds[0];
+
+		GFAPI::add_feed( $new_form_id, $copy_feed['meta'], $this->get_slug() );
 	}
 
 	public function replace_custom_js_setting( $form_settings, $form ) {
