@@ -255,7 +255,7 @@ class GWiz_GF_Code_Chest extends GFFeedAddOn {
 		 * script so that the action runs only after all other scripts have been loaded.
 		 */
 		add_filter( 'gform_register_init_scripts', array( $this, 'register_gfcc_deferred_action_script' ), 101, 1 );
-		add_filter( 'gform_get_form_filter', array( $this, 'add_custom_css' ), 10, 2 );
+		add_filter( 'gform_form_after_open', array( $this, 'add_custom_css' ), 10, 2 );
 	}
 
 	public function enqueue_editor_script() {
@@ -400,10 +400,10 @@ class GWiz_GF_Code_Chest extends GFFeedAddOn {
 		}
 
 		if ( ! empty( $custom_css ) ) {
-			$form_string .= sprintf( '<style>%s</style>', $custom_css );
+			return sprintf( '<style>%s</style>', $custom_css );
 		}
 
-		return $form_string;
+		return '';
 	}
 
 	public function is_applicable_form( $form ) {
