@@ -236,8 +236,6 @@ class GWiz_GF_Code_Chest extends GFFeedAddOn {
 			add_filter( 'gform_noconflict_scripts', array( $this, 'noconflict_scripts' ) );
 			add_filter( 'gform_noconflict_styles', array( $this, 'noconflict_styles' ) );
 
-			add_action( 'admin_notices', array( $this, 'maybe_display_custom_js_warning' ) );
-
 			// 11 so that this comes right after and can override the legacy Custom JS plugin setting config.
 			add_filter( 'gform_form_settings_fields', array( $this, 'replace_custom_js_setting' ), 11, 2 );
 		}
@@ -621,26 +619,6 @@ EOT;
 			}
 
 			GFAPI::update_form( $form );
-		}
-	}
-
-	public function maybe_display_custom_js_warning() {
-		$custom_js_file_name = 'gw-gravity-forms-custom-js.php';
-		if (
-			is_plugin_active( $custom_js_file_name )
-			|| class_exists( 'GF_Custom_JS' )
-		) {
-			echo '<div class="notice notice-warning is-dismissible">';
-			/* translators: %s: <b> opening HTML tag, %s </b> closing HTML tag */
-			echo '<p>' . __( sprintf(
-			'Warning: %sGravity Forms Custom Javascript%s is currently active.', '<b>', '</b>' ),
-				'gf-code-chest'
-			) . '</p>';
-			echo '<p>' . __(
-				'Enabling this at the same time as GF Code Chest at the same time may result in custom Javascript loading twice in your form.',
-				'gw-code-chest'
-			) . '</p>';
-			echo '</div>';
 		}
 	}
 
