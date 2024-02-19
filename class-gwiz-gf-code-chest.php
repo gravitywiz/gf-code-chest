@@ -658,21 +658,20 @@ EOT;
 					'type'     => 'editor_js',
 					'callback' => function ( $setting ) use ( $form ) {
 						$form_id = $form['id'];
-						return <<<EOT
-							<div
-								id="gform_setting_code_chest_js_overridden_warning"
-								class="gform-settings-field gform-settings-field__html"
-							>
-								Custom Code is managed through the Code Chest page when <b>GF Code Chest</b> is active.<br><br>
-								<a
-									href="/wp-admin/admin.php?subview=gf-code-chest&page=gf_edit_forms&id=$form_id&view=settings"
-									class="gform-button
-									gform-button--white"
-								>
-									Go To Code Chest Settings
-								</a>
-							</div>
-						EOT;
+						$markup_pieces = array(
+							'<div id="gform_setting_code_chest_js_overridden_warning" class="gform-settings-field gform-settings-field__html">',
+							'<div class="gform-settings-field"><b>',
+							__( 'GF Code Chest replaces GF Custom JavaScript.', 'gf-code-chest' ),
+							'</b>',
+							__( 'Code Chest is now managing your existing Custom JavaScript scripts. You can safely deactivate the Custom JavaScript plugin immediately.', 'gf-code-chest' ),
+							'</div>',
+							"<a href=\"/wp-admin/admin.php?subview=gf-code-chest&page=gf_edit_forms&id={$form_id}&view=settings\" class=\"gform-button gform-button--white\">",
+							__( 'Open Code Chest', 'gf-code-chest' ),
+							'</a>',
+							'</div>',
+						);
+
+						return implode( ' ', $markup_pieces );
 					},
 				),
 			),
