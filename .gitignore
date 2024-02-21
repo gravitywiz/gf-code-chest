@@ -1,6 +1,9 @@
 # macOS Junk Files
 .DS_Store
 
+# IDEs
+.idea
+
 # Composer
 vendor
 third-party
