@@ -89,7 +89,7 @@ class GWiz_GF_Code_Chest extends GFFeedAddOn {
 	 * Give the form settings and plugin settings panels a nice shiny icon.
 	 */
 	public function get_menu_icon() {
-		return 'dashicons-editor-code';
+		return $this->get_base_url() . '/assets/images/icon.svg';
 	}
 
 	/**
@@ -100,7 +100,7 @@ class GWiz_GF_Code_Chest extends GFFeedAddOn {
 	public function minimum_requirements() {
 		return array(
 			'gravityforms' => array(
-				'version' => '2.5',
+				'version' => '2.7',
 			),
 			'wordpress'    => array(
 				'version' => '4.8',
@@ -162,13 +162,10 @@ class GWiz_GF_Code_Chest extends GFFeedAddOn {
 				'description_url' => 'https://raw.githubusercontent.com/gravitywiz/gf-code-chest/main/readme.md',
 				'changelog_url'   => 'https://raw.githubusercontent.com/gravitywiz/gf-code-chest/main/changelog.txt',
 				'icons'           => array(
-					// TODO make sure this dashicon id string works correctly:
-					'dashicon-editor-code',
-					// 'svg' => 'https://raw.githubusercontent.com/gravitywiz/gf-code-chest/master/icon.svg',
+					'svg' => 'https://raw.githubusercontent.com/gravitywiz/gf-code-chest/main/assets/images/icon.svg',
 				),
 				'banners'         => array(
-					// TODO update this
-					'low' => 'https://gravitywiz.com/wp-content/uploads/2022/12/gfoai-by-dalle-1.png',
+					'low' => 'https://raw.githubusercontent.com/gravitywiz/gf-code-chest/main/assets/images/banner.jpg',
 				),
 				'requires_php'    => '5.6.0',
 			)
