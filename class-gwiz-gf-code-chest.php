@@ -389,7 +389,7 @@ class GWiz_GF_Code_Chest extends GFFeedAddOn {
 
 	public function add_custom_css( $form_string, $form ) {
 		$custom_css = $this->get_custom_css( $form );
-		$custom_css = html_entity_decode( $custom_css );
+		$custom_css = html_entity_decode( (string) $custom_css );
 		$custom_css = str_replace( 'GFFORMID', $form['id'], $custom_css );
 
 		$settings = $this->get_settings( $form['id'] );
