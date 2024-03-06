@@ -648,7 +648,8 @@ EOT;
 					'name'     => 'code_chest_js',
 					'type'     => 'editor_js',
 					'callback' => function ( $setting ) use ( $form ) {
-						$form_id = $form['id'];
+						$form_id  = $form['id'];
+						$url_path = parse_url( RGFormsModel::get_current_page_url(), PHP_URL_PATH );
 						$markup_pieces = array(
 							'<div id="gform_setting_code_chest_js_overridden_warning" class="gform-settings-field gform-settings-field__html">',
 							'<div class="gform-settings-field"><b>',
@@ -656,7 +657,7 @@ EOT;
 							'</b>',
 							__( 'Code Chest is now managing your existing Custom JavaScript scripts. You can safely deactivate the Custom JavaScript plugin immediately.', 'gf-code-chest' ),
 							'</div>',
-							"<a href=\"/wp-admin/admin.php?subview=gf-code-chest&page=gf_edit_forms&id={$form_id}&view=settings\" class=\"gform-button gform-button--white\">",
+							"<a href=\"{$url_path}?subview=gf-code-chest&page=gf_edit_forms&id={$form_id}&view=settings\" class=\"gform-button gform-button--white\">",
 							__( 'Open Code Chest', 'gf-code-chest' ),
 							'</a>',
 							'</div>',
