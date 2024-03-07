@@ -648,8 +648,7 @@ EOT;
 					'name'     => 'code_chest_js',
 					'type'     => 'editor_js',
 					'callback' => function ( $setting ) use ( $form ) {
-						$form_id  = $form['id'];
-						$url_path = parse_url( RGFormsModel::get_current_page_url(), PHP_URL_PATH );
+						$form_id = $form['id'];
 						$markup_pieces = array(
 							'<div id="gform_setting_code_chest_js_overridden_warning" class="gform-settings-field gform-settings-field__html">',
 							'<div class="gform-settings-field"><b>',
