@@ -657,7 +657,7 @@ EOT;
 							'</b>',
 							__( 'Code Chest is now managing your existing Custom JavaScript scripts. You can safely deactivate the Custom JavaScript plugin immediately.', 'gf-code-chest' ),
 							'</div>',
-							"<a href=\"{$url_path}?subview=gf-code-chest&page=gf_edit_forms&id={$form_id}&view=settings\" class=\"gform-button gform-button--white\">",
+							'<a href="' . admin_url( "admin.php?subview=gf-code-chest&page=gf_edit_forms&id={$form_id}&view=settings" ) . '" class="gform-button gform-button--white">',
 							__( 'Open Code Chest', 'gf-code-chest' ),
 							'</a>',
 							'</div>',
