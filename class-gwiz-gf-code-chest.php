@@ -630,9 +630,12 @@ EOT;
 
 	public function duplicate_form_feeds( $form_id, $new_form_id ) {
 		$src_feeds = $this->get_feeds( $form_id );
-		$copy_feed = $src_feeds[0];
 
-		GFAPI::add_feed( $new_form_id, $copy_feed['meta'], $this->get_slug() );
+		if ( count( $src_feeds ) > 0 ) {
+			$copy_feed = $src_feeds[0];
+
+			GFAPI::add_feed( $new_form_id, $copy_feed['meta'], $this->get_slug() );
+		}
 	}
 
 	public function replace_custom_js_setting( $form_settings, $form ) {
