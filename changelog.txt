@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.0.1
+
+	- Fixed issue where PHP error would occur if a form without custom code was duplicated.
+	- Fixed issue with 'Open Code Chest' link on a sub site redirecting back to the main site.
+	- Fixed a notice generated on PHP 8.1+ when no custom CSS was set.
+
 ## 1.0.0
 
 	- Hello World!
