@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.0.2
+
+	- Fixed issue where CSS comments containing a comma would be prefixed incorrectly, which could cause syntax errors in the CSS.
+
 ## 1.0.1
 
 	- Fixed issue where PHP error would occur if a form without custom code was duplicated.
