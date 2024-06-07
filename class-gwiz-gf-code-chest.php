@@ -404,10 +404,10 @@ class GWiz_GF_Code_Chest extends GFFeedAddOn {
 		}
 
 		if ( ! empty( $custom_css ) ) {
-			return sprintf( '<style>%s</style>', $custom_css );
+			return $form_string . sprintf( '<style>%s</style>', $custom_css );
 		}
 
-		return '';
+		return $form_string;
 	}
 
 	public function is_applicable_form( $form ) {
