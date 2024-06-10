@@ -268,6 +268,10 @@ class GWiz_GF_Code_Chest extends GFFeedAddOn {
 	}
 
 	public function save_code_chest_settings( $feed_id, $form_id, $settings, $feed_addon_instance ) {
+		if ( ! ( $feed_addon_instance instanceof GWiz_GF_Code_Chest ) ) {
+			return;
+		}
+
 		/**
 		 * Note that this must be handled manually as we (almost) completelty override the
 		 * settings form markup which apparently prevents GF from saving the settings.
