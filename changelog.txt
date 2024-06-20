@@ -1,15 +1,19 @@
 # Changelog
 
+## 1.0.3 | June 20, 2024
+
+- Fixed issue where Code Chest overwrote 3rd-party values added via the `gform_form_after_open` filter. Credit: [Bas Tolen](https://github.com/bastolen).
+
 ## 1.0.2
 
-	- Fixed issue where CSS comments containing a comma would be prefixed incorrectly, which could cause syntax errors in the CSS.
+- Fixed issue where CSS comments containing a comma would be prefixed incorrectly, which could cause syntax errors in the CSS.
 
 ## 1.0.1
 
-	- Fixed issue where PHP error would occur if a form without custom code was duplicated.
-	- Fixed issue with 'Open Code Chest' link on a sub site redirecting back to the main site.
-	- Fixed a notice generated on PHP 8.1+ when no custom CSS was set.
+- Fixed issue where PHP error would occur if a form without custom code was duplicated.
+- Fixed issue with 'Open Code Chest' link on a sub site redirecting back to the main site.
+- Fixed a notice generated on PHP 8.1+ when no custom CSS was set.
 
 ## 1.0.0
 
-	- Hello World!
+- Hello World!
