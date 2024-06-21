@@ -22,6 +22,8 @@ define( 'GWIZ_GF_CODE_CHEST_VERSION', '1.0.3' );
 
 defined( 'ABSPATH' ) || die();
 
+require plugin_dir_path( __FILE__ ) . 'vendor/autoload_packages.php';
+
 add_action( 'gform_loaded', function() {
 	if ( ! method_exists( 'GFForms', 'include_feed_addon_framework' ) ) {
 		return;

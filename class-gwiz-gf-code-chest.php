@@ -12,7 +12,7 @@ GFForms::include_feed_addon_framework();
 
 class GWiz_GF_Code_Chest extends GFFeedAddOn {
 	/**
-	 * @var GWiz_GF_Code_Chest\Dependencies\Inc2734\WP_GitHub_Plugin_Updater\Bootstrap The updater instance.
+	 * @var Inc2734\WP_GitHub_Plugin_Updater\Bootstrap The updater instance.
 	 */
 	public $updater;
 
@@ -114,7 +114,6 @@ class GWiz_GF_Code_Chest extends GFFeedAddOn {
 	public function pre_init() {
 		parent::pre_init();
 
-		$this->setup_autoload();
 		$this->init_auto_updater();
 
 		/**
@@ -122,26 +121,6 @@ class GWiz_GF_Code_Chest extends GFFeedAddOn {
 		 */
 		add_filter( 'gform_export_form', array( $this, 'export_feeds_with_form' ) );
 		add_action( 'gform_forms_post_import', array( $this, 'import_feeds_with_form' ) );
-	}
-
-	/**
-	 * @credit https://github.com/google/site-kit-wp
-	 */
-	public function setup_autoload() {
-		$class_map = array_merge(
-			include plugin_dir_path( __FILE__ ) . 'third-party/vendor/composer/autoload_classmap.php'
-		);
-
-		spl_autoload_register(
-			function ( $class ) use ( $class_map ) {
-				$namespace = 'GWiz_GF_Code_Chest\\Dependencies';
-				if ( isset( $class_map[ $class ] ) && substr( $class, 0, strlen( $namespace ) ) === $namespace ) {
-					require_once $class_map[ $class ];
-				}
-			},
-			true,
-			true
-		);
 	}
 
 	/**
@@ -154,7 +133,7 @@ class GWiz_GF_Code_Chest extends GFFeedAddOn {
 			array( $this, 'filter_auto_updater_response' ), 10, 2
 		);
 
-		$this->updater = new GWiz_GF_Code_Chest\Dependencies\Inc2734\WP_GitHub_Plugin_Updater\Bootstrap(
+		$this->updater = new Inc2734\WP_GitHub_Plugin_Updater\Bootstrap(
 			plugin_basename( plugin_dir_path( __FILE__ ) . 'gf-code-chest.php' ),
 			'gravitywiz',
 			'gf-code-chest',
@@ -202,7 +181,7 @@ class GWiz_GF_Code_Chest extends GFFeedAddOn {
 		$obj->homepage = 'https://gravitywiz.com/gf-code-chest/';
 		$obj->author   = '<a href="https://gravitywiz.com/" target="_blank">Gravity Wiz</a>';
 
-		$parsedown = new GWiz_GF_Code_Chest\Dependencies\Parsedown();
+		$parsedown = new Parsedown();
 		$changelog = trim( $obj->sections['changelog'] );
 
 		// Remove the "Changelog" h1.
