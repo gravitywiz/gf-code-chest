@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.0.4 | June 26, 2024
+
+- Fixed issue with `gform_post_save_feed_settings` hook callback that potentially breaks other plugins.
+- Added Parsedown as a dependency.
+- Removed `php-scoper` in favor of `jetpack-autoloader`.
+
 ## 1.0.3 | June 20, 2024
 
 - Fixed issue where Code Chest overwrote 3rd-party values added via the `gform_form_after_open` filter. Credit: [Bas Tolen](https://github.com/bastolen).
