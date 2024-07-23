@@ -1,0 +1,24 @@
+# Copyright (C) 2019 {package-name}
+# This file is distributed under the same license as the {package-name} package.
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: https://make.wordpress.org/polyglots/\n"
+"POT-Creation-Date: 2019-09-02 11:17+0900\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"PO-Revision-Date: 2019-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"X-Generator: Poedit 2.0.4\n"
+
+#: Bootstrap.php:287
+msgid "Failed to get update response."
+msgstr ""
+
+#. Translators: 1: Plugin name, 2: Error message
+#: Bootstrap.php:292
+msgid "[%1$s] %2$s"
+msgstr ""
