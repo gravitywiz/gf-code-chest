@@ -6,7 +6,6 @@
 
 # Composer
 vendor
-third-party
 
 # Cypress
 cypress/screenshots
