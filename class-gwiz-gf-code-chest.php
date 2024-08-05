@@ -208,17 +208,6 @@ class GWiz_GF_Code_Chest extends GFFeedAddOn {
 
 		load_plugin_textdomain( $this->_slug, false, basename( dirname( __file__ ) ) . '/languages/' );
 
-		if ( current_user_can( 'administrator' ) ) {
-			add_filter( 'gform_tooltips', array( $this, 'tooltips' ) );
-			add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_editor_script' ) );
-			add_action( 'gform_post_save_feed_settings', array( $this, 'save_code_chest_settings' ), 10, 4 );
-			add_filter( 'gform_noconflict_scripts', array( $this, 'noconflict_scripts' ) );
-			add_filter( 'gform_noconflict_styles', array( $this, 'noconflict_styles' ) );
-
-			// 11 so that this comes right after and can override the legacy Custom JS plugin setting config.
-			add_filter( 'gform_form_settings_fields', array( $this, 'replace_custom_js_setting' ), 11, 2 );
-		}
-
 		add_filter( 'gform_register_init_scripts', array( $this, 'register_init_script' ), 99, 1 );
 		add_filter( 'gform_register_init_scripts', array( $this, 'maybe_register_custom_js_scripts_first' ), 100, 1 );
 
@@ -238,6 +227,18 @@ class GWiz_GF_Code_Chest extends GFFeedAddOn {
 		 * Hook for duplicating form feeds when duplicating a form.
 		 */
 		add_action( 'gform_post_form_duplicated', array( $this, 'duplicate_form_feeds' ), 10, 2 );
+	}
+
+	public function init_admin() {
+		parent::init_admin();
+
+		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_editor_script' ) );
+		add_action( 'gform_post_save_feed_settings', array( $this, 'save_code_chest_settings' ), 10, 4 );
+		add_filter( 'gform_noconflict_scripts', array( $this, 'noconflict_scripts' ) );
+		add_filter( 'gform_noconflict_styles', array( $this, 'noconflict_styles' ) );
+
+		// 11 so that this comes right after and can override the legacy Custom JS plugin setting config.
+		add_filter( 'gform_form_settings_fields', array( $this, 'replace_custom_js_setting' ), 11, 2 );
 	}
 
 	public function enqueue_editor_script() {
@@ -421,17 +422,6 @@ class GWiz_GF_Code_Chest extends GFFeedAddOn {
 	public function get_custom_css( $form ) {
 		$settings = $this->get_settings( $form['id'] );
 		return rgar( $settings, 'code_chest_css' );
-	}
-
-	/**
-	 * Registers tooltips with Gravity Forms. Needed for some things like radio choices.
-	 *
-	 * @param $tooltips array Existing tooltips.
-	 *
-	 * @return array
-	 */
-	public function tooltips( $tooltips ) {
-		return $tooltips;
 	}
 
 	public function feed_settings_fields() {
