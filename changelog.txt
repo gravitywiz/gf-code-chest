@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.0.6 | August 14, 2024
+
+- Fixed an issue that prevented code editor scripts from loading for users with capabilities to edit Gravity Forms, but who did not have the `administrator` role.
+
 ## 1.0.5 | July 23, 2024
 
 - Fixed PHP warning that could occur when updating from 1.0.3 or older to any version using the new `jetpack-autoloader`.
