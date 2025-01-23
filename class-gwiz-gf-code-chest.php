@@ -142,9 +142,12 @@ class GWiz_GF_Code_Chest extends GFFeedAddOn {
 				'changelog_url'   => 'https://raw.githubusercontent.com/gravitywiz/gf-code-chest/main/changelog.txt',
 				'icons'           => array(
 					'svg' => 'https://raw.githubusercontent.com/gravitywiz/gf-code-chest/main/assets/images/icon.svg',
+					'1x'  => 'https://raw.githubusercontent.com/gravitywiz/gf-code-chest/main/assets/images/icon-1x.png',
+					'2x'  => 'https://raw.githubusercontent.com/gravitywiz/gf-code-chest/main/assets/images/icon-2x.png',
 				),
 				'banners'         => array(
-					'low' => 'https://raw.githubusercontent.com/gravitywiz/gf-code-chest/main/assets/images/banner.jpg',
+					'low'  => 'https://raw.githubusercontent.com/gravitywiz/gf-code-chest/main/assets/images/banner-low.png',
+					'high' => 'https://raw.githubusercontent.com/gravitywiz/gf-code-chest/main/assets/images/banner-high.png',
 				),
 				'requires_php'    => '5.6.0',
 			)
