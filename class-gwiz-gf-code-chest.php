@@ -255,6 +255,14 @@ class GWiz_GF_Code_Chest extends GFFeedAddOn {
 
 		wp_enqueue_script( 'wp-theme-plugin-editor' );
 		wp_enqueue_style( 'wp-codemirror' );
+
+		wp_enqueue_script(
+			'gf-code-chest-custom-linter',
+			$this->get_base_url() . '/assets/js/code-mirror-custom-linter.js',
+			array( 'wp-theme-plugin-editor' ),
+			$this->_version,
+			true
+		);
 	}
 
 	public function noconflict_scripts( $scripts = array() ) {
