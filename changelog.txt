@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.0.7 | January 29, 2025
+
+- Added linter warning about AJAX enabled forms when using `gform_post_render`, `gform/postRender` and `gform/post_render`.
+- Added new updater icon and banner.
+
 ## 1.0.6 | August 14, 2024
 
 - Fixed an issue that prevented code editor scripts from loading for users with capabilities to edit Gravity Forms, but who did not have the `administrator` role.
