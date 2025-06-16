@@ -1,8 +1,8 @@
 <?php
 /**
  * Plugin Name: Gravity Forms Code Chest
- * Description: Pair the magic of Code Chest's robust models with Gravity Forms' flexibility.
- * Plugin URI: https://gravitywiz.com/gf-code-chest/
+ * Description: Implement your form-specific styles and scripts for simple, portable customizations. Ahoy!
+ * Plugin URI: https://gravitywiz.com/gravity-forms-code-chest/
  * Version: 1.0.7
  * Author: Gravity Wiz
  * Author URI: https://gravitywiz.com/
@@ -14,7 +14,7 @@
  * @copyright Copyright (c) 2022, Gravity Wiz, LLC
  * @author Gravity Wiz <support@gravitywiz.com>
  * @license GPLv2
- * @link https://github.com/gravitywiz/gf-code-chest
+ * @link https://gravitywiz.com/gravity-forms-code-chest/
  */
 
 
