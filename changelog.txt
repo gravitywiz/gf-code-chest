@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.0.8 | June 17, 2025
+
+- Updated the plugin description and URLs.
+
 ## 1.0.7 | January 29, 2025
 
 - Added linter warning about AJAX enabled forms when using `gform_post_render`, `gform/postRender` and `gform/post_render`.

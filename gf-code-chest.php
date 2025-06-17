@@ -3,7 +3,7 @@
  * Plugin Name: Gravity Forms Code Chest
  * Description: Implement your form-specific styles and scripts for simple, portable customizations. Ahoy!
  * Plugin URI: https://gravitywiz.com/gravity-forms-code-chest/
- * Version: 1.0.7
+ * Version: 1.0.8
  * Author: Gravity Wiz
  * Author URI: https://gravitywiz.com/
  * License: GPL2
@@ -18,7 +18,7 @@
  */
 
 
-define( 'GWIZ_GF_CODE_CHEST_VERSION', '1.0.7' );
+define( 'GWIZ_GF_CODE_CHEST_VERSION', '1.0.8' );
 
 defined( 'ABSPATH' ) || die();
 
