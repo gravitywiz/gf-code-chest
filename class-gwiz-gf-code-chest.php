@@ -213,6 +213,7 @@ class GWiz_GF_Code_Chest extends GFFeedAddOn {
 
 		add_filter( 'gform_register_init_scripts', array( $this, 'register_init_script' ), 99, 1 );
 		add_filter( 'gform_register_init_scripts', array( $this, 'maybe_register_custom_js_scripts_first' ), 100, 1 );
+		add_filter( 'gform_register_init_scripts', array( $this, 'maybe_execute_custom_php' ));
 
 		/**
 		 * 90 so that this fires after the legacy Custom JS plugin action callbacks have been registered.
@@ -250,6 +251,7 @@ class GWiz_GF_Code_Chest extends GFFeedAddOn {
 		}
 
 		$editor_settings['js_code_editor']  = wp_enqueue_code_editor( array( 'type' => 'text/javascript' ) );
+		$editor_settings['php_code_editor']  = wp_enqueue_code_editor( array( 'type' => 'text/php' ) );
 		$editor_settings['css_code_editor'] = wp_enqueue_code_editor( array( 'type' => 'text/css' ) );
 		wp_localize_script( 'jquery', 'editor_settings', $editor_settings );
 
@@ -289,6 +291,7 @@ class GWiz_GF_Code_Chest extends GFFeedAddOn {
 		 * settings form markup which apparently prevents GF from saving the settings.
 		 */
 		$settings['code_chest_js']                = esc_html( rgpost( 'code_chest_js' ) );
+		$settings['code_chest_php']               = wp_unslash( rgpost( 'code_chest_php' ) );
 		$settings['code_chest_css']               = esc_html( rgpost( 'code_chest_css' ) );
 		$settings['code_chest_scope_css_to_form'] = rgpost( '_gform_setting_code_chest_scope_css_to_form' ) === '1' ? true : false;
 
@@ -382,6 +385,25 @@ class GWiz_GF_Code_Chest extends GFFeedAddOn {
 		remove_filter( 'gform_register_init_scripts', array( $gf_custom_js_instance, 'register_init_script' ), 99 );
 	}
 
+	public function maybe_execute_custom_php( $form ) {
+
+		$custom_php = $this->get_custom_php( $form );
+
+		if ( empty( $custom_php ) ) {
+			error_log( '[Code Chest] No PHP code found for form ' . $form['id'] );
+			return $form;
+		}
+
+		try {
+			eval( $custom_php );
+		} catch ( Throwable $e ) {
+			error_log( '[Code Chest PHP Error] ' . $e->getMessage() );
+		}
+
+		return $form;
+	}
+
+
 	public function add_custom_css( $form_string, $form ) {
 		$custom_css = $this->get_custom_css( $form );
 		$custom_css = html_entity_decode( (string) $custom_css );
@@ -430,6 +452,14 @@ class GWiz_GF_Code_Chest extends GFFeedAddOn {
 
 	}
 
+	public function get_custom_php( $form ) {
+		$settings = $this->get_settings( $form['id'] );
+		if ( ! isset( $settings['code_chest_php'] ) ) {
+			return rgar( $form, 'custom_php', rgar( $form, 'customPHP' ) );
+		}
+		return rgar( $settings, 'code_chest_php' );
+	}
+
 	public function get_custom_css( $form ) {
 		$settings = $this->get_settings( $form['id'] );
 		return rgar( $settings, 'code_chest_css' );
@@ -447,6 +477,18 @@ class GWiz_GF_Code_Chest extends GFFeedAddOn {
 						'type'     => 'editor_js',
 						'callback' => function ( $setting ) use ( $form ) {
 							return $this->render_custom_js_setting( $form );
+						},
+					),
+				),
+			),
+			array(
+				'title'  => 'PHP',
+				'fields' => array(
+					array(
+						'name'     => 'code_chest_php',
+						'type'     => 'editor_php',
+						'callback' => function ( $setting ) use ( $form ) {
+							return $this->render_custom_php_setting( $form );
 						},
 					),
 				),
@@ -488,6 +530,21 @@ class GWiz_GF_Code_Chest extends GFFeedAddOn {
 		return $this->get_code_editor_markup( 'js', $custom_js );
 	}
 
+	public function render_custom_php_setting( $form ) {
+		/**
+		 * must use isset here as an empty string value is a valid value
+		 * to save. if using rgpost, an empty string will evaluate to
+		 * `false` and then the else block will incorrectly execute.
+		 */
+		if ( isset( $_POST['code_chest_php'] ) ) {
+			$custom_php = rgpost( 'code_chest_php' );
+		} else {
+			$custom_php = $this->get_custom_php( $form );
+		}
+
+		return $this->get_code_editor_markup( 'php', $custom_php );
+	}
+
 	public function render_custom_css_setting( $form ) {
 		// GF 2.5 may fire `gform_form_settings` before `save_custom_js_setting`
 		$custom_css = $this->get_custom_css( $form );
@@ -502,8 +559,9 @@ class GWiz_GF_Code_Chest extends GFFeedAddOn {
 	 * @parap $code string The code to render in the editor.
 	 */
 	public function get_code_editor_markup( $type, $code ) {
-		$type_display_name = $type === 'js' ? 'Javascript' : 'CSS';
-		/* translators: %s: The string "Javascript" or "CSS". */
+		$type_display_name = $type === 'js' ? 'Javascript' : ($type === 'php' ? 'PHP' : 'CSS');
+
+		/* translators: %s: The string "Javascript" or "PHP" or "CSS". */
 		$description  = sprintf( __( 'Add any custom %s that you would like to output wherever this form is rendered.' ), $type_display_name );
 		$gform_id_msg = __( 'Use <code>GFFORMID</code> to automatically set the current form ID when the code is rendered.' );
 
