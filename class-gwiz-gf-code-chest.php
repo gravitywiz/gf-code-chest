@@ -390,14 +390,14 @@ class GWiz_GF_Code_Chest extends GFFeedAddOn {
 		$custom_php = $this->get_custom_php( $form );
 
 		if ( empty( $custom_php ) ) {
-			error_log( '[Code Chest] No PHP code found for form ' . $form['id'] );
+			$this->log_error( '[Code Chest] No PHP code found for form ' . $form['id'] );
 			return $form;
 		}
 
 		try {
 			eval( $custom_php );
 		} catch ( Throwable $e ) {
-			error_log( '[Code Chest PHP Error] ' . $e->getMessage() );
+			$this->log_error( 'Code Chest] No PHP code found for form ');
 		}
 
 		return $form;
@@ -454,9 +454,6 @@ class GWiz_GF_Code_Chest extends GFFeedAddOn {
 
 	public function get_custom_php( $form ) {
 		$settings = $this->get_settings( $form['id'] );
-		if ( ! isset( $settings['code_chest_php'] ) ) {
-			return rgar( $form, 'custom_php', rgar( $form, 'customPHP' ) );
-		}
 		return rgar( $settings, 'code_chest_php' );
 	}
 
@@ -559,8 +556,17 @@ class GWiz_GF_Code_Chest extends GFFeedAddOn {
 	 * @parap $code string The code to render in the editor.
 	 */
 	public function get_code_editor_markup( $type, $code ) {
-		$type_display_name = $type === 'js' ? 'Javascript' : ($type === 'php' ? 'PHP' : 'CSS');
-
+		switch ($type) {
+			case 'js':
+				$type_display_name = 'Javascript';
+				break;
+			case 'php':
+				$type_display_name = 'PHP';
+				break;
+			case 'css':
+				$type_display_name = 'CSS';
+				break;
+		}
 		/* translators: %s: The string "Javascript" or "PHP" or "CSS". */
 		$description  = sprintf( __( 'Add any custom %s that you would like to output wherever this form is rendered.' ), $type_display_name );
 		$gform_id_msg = __( 'Use <code>GFFORMID</code> to automatically set the current form ID when the code is rendered.' );
