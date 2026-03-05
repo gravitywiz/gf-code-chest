@@ -114,6 +114,8 @@ class GWiz_GF_Code_Chest extends GFFeedAddOn {
 	public function pre_init() {
 		parent::pre_init();
 
+		add_filter( 'expiration_of_transient_wp_github_plugin_updater_gf-code-chest/gf-code-chest.php', array( $this, 'filter_updater_cache_ttl' ), 10, 3 );
+
 		$this->init_auto_updater();
 
 		/**
@@ -121,6 +123,29 @@ class GWiz_GF_Code_Chest extends GFFeedAddOn {
 		 */
 		add_filter( 'gform_export_form', array( $this, 'export_feeds_with_form' ) );
 		add_action( 'gform_forms_post_import', array( $this, 'import_feeds_with_form' ) );
+	}
+
+	/**
+	 * Filter the updater release metadata cache TTL.
+	 *
+	 * Defaults to the bundled updater value, unless overridden
+	 * with the `gfcc_updater_cache_ttl` filter.
+	 *
+	 * @param int    $expiration Existing transient expiration in seconds.
+	 * @param mixed  $value      Transient value.
+	 * @param string $transient  Transient name.
+	 *
+	 * @return int
+	 */
+	public function filter_updater_cache_ttl( $expiration, $value, $transient ) {
+		$ttl = (int) apply_filters(
+			'gfcc_updater_cache_ttl',
+			$expiration,
+			$value,
+			$transient
+		);
+
+		return $ttl;
 	}
 
 	/**
