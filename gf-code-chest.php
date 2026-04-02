@@ -24,23 +24,13 @@ defined( 'ABSPATH' ) || die();
 
 require plugin_dir_path( __FILE__ ) . 'vendor/autoload_packages.php';
 
+\Spellbook\Bootstrap::register( __FILE__ );
+
 add_action( 'gform_loaded', function() {
 	if ( ! method_exists( 'GFForms', 'include_feed_addon_framework' ) ) {
 		return;
 	}
 
-	require plugin_dir_path( __FILE__ ) . 'class-gwiz-gf-code-chest.php';
-
 	GFAddOn::register( 'GWiz_GF_Code_Chest' );
 }, 0 ); // Load before Gravity Flow
 
-/**
- * Returns an instance of the GWiz_GF_Code_Chest class
- *
- * @see    GWiz_GF_Code_Chest::get_instance()
- *
- * @return GWiz_GF_Code_Chest
- */
-function gwiz_gf_code_chest() {
-	return GWiz_GF_Code_Chest::get_instance();
-}
