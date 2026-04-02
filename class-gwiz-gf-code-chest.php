@@ -668,3 +668,15 @@ EOT;
 		}, $css);
 	}
 }
+
+/**
+ * Returns an instance of the GWiz_GF_Code_Chest class
+ *
+ * @see    GWiz_GF_Code_Chest::get_instance()
+ *
+ * @return GWiz_GF_Code_Chest
+ */
+function gwiz_gf_code_chest() {
+	return GWiz_GF_Code_Chest::get_instance();
+}
+

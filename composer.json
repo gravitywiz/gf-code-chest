@@ -5,9 +5,10 @@
 		"phpcompatibility/php-compatibility": "*"
 	},
 	"require": {
-		"inc2734/wp-github-plugin-updater": "^3.1",
-		"automattic/jetpack-autoloader": "^3.0",
-		"erusev/parsedown": "^1.7"
+		"automattic/jetpack-autoloader": "^5.0.16",
+		"erusev/parsedown": "^1.7",
+		"inc2734/wp-github-plugin-updater": "^3.0",
+		"gravitywiz/spellbook-bootstrap": "^0.0.5"
 	},
 	"scripts": {
 		"lint": "phpcs",
