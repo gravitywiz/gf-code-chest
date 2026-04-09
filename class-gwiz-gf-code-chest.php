@@ -12,11 +12,6 @@ GFForms::include_feed_addon_framework();
 
 class GWiz_GF_Code_Chest extends GFFeedAddOn {
 	/**
-	 * @var Inc2734\WP_GitHub_Plugin_Updater\Bootstrap The updater instance.
-	 */
-	public $updater;
-
-	/**
 	 * @var null|GWiz_GF_Code_Chest
 	 */
 	private static $instance = null;
@@ -109,96 +104,16 @@ class GWiz_GF_Code_Chest extends GFFeedAddOn {
 	}
 
 	/**
-	 * Load dependencies and initialize auto-updater
+	 * Load dependencies
 	 */
 	public function pre_init() {
 		parent::pre_init();
-
-		$this->init_auto_updater();
 
 		/**
 		 * Hooks for exporting and importing feeds with forms.
 		 */
 		add_filter( 'gform_export_form', array( $this, 'export_feeds_with_form' ) );
 		add_action( 'gform_forms_post_import', array( $this, 'import_feeds_with_form' ) );
-	}
-
-	/**
-	 * Initialize the auto-updater.
-	 */
-	public function init_auto_updater() {
-		// Initialize GitHub auto-updater
-		add_filter(
-			'inc2734_github_plugin_updater_plugins_api_gravitywiz/gf-code-chest',
-			array( $this, 'filter_auto_updater_response' ), 10, 2
-		);
-
-		$this->updater = new Inc2734\WP_GitHub_Plugin_Updater\Bootstrap(
-			plugin_basename( plugin_dir_path( __FILE__ ) . 'gf-code-chest.php' ),
-			'gravitywiz',
-			'gf-code-chest',
-			array(
-				'description_url' => 'https://raw.githubusercontent.com/gravitywiz/gf-code-chest/main/readme.md',
-				'changelog_url'   => 'https://raw.githubusercontent.com/gravitywiz/gf-code-chest/main/changelog.txt',
-				'icons'           => array(
-					'svg' => 'https://raw.githubusercontent.com/gravitywiz/gf-code-chest/main/assets/images/icon.svg',
-					'1x'  => 'https://raw.githubusercontent.com/gravitywiz/gf-code-chest/main/assets/images/icon-1x.png',
-					'2x'  => 'https://raw.githubusercontent.com/gravitywiz/gf-code-chest/main/assets/images/icon-2x.png',
-				),
-				'banners'         => array(
-					'low'  => 'https://raw.githubusercontent.com/gravitywiz/gf-code-chest/main/assets/images/banner-low.png',
-					'high' => 'https://raw.githubusercontent.com/gravitywiz/gf-code-chest/main/assets/images/banner-high.png',
-				),
-				'requires_php'    => '5.6.0',
-			)
-		);
-	}
-
-	/**
-	 * Filter the GitHub auto-updater response to remove sections we don't need and update various fields.
-	 *
-	 * @param stdClass $obj
-	 * @param stdClass $response
-	 *
-	 * @return stdClass
-	 */
-	public function filter_auto_updater_response( $obj, $response ) {
-		$remove_sections = array(
-			'installation',
-			'faq',
-			'screenshots',
-			'reviews',
-			'other_notes',
-		);
-
-		foreach ( $remove_sections as $section ) {
-			if ( isset( $obj->sections[ $section ] ) ) {
-				unset( $obj->sections[ $section ] );
-			}
-		}
-
-		if ( isset( $obj->active_installs ) ) {
-			unset( $obj->active_installs );
-		}
-
-		$obj->homepage = 'https://gravitywiz.com/gf-code-chest/';
-		$obj->author   = '<a href="https://gravitywiz.com/" target="_blank">Gravity Wiz</a>';
-
-		$parsedown = new Parsedown();
-		$changelog = trim( $obj->sections['changelog'] );
-
-		// Remove the "Changelog" h1.
-		$changelog = preg_replace( '/^# Changelog/m', '', $changelog );
-
-		// Remove the tab before the list item so it's not treated as code.
-		$changelog = preg_replace( '/^\t- /m', '- ', $changelog );
-
-		// Convert h2 to h4 to avoid weird styles that add a lot of whitespace.
-		$changelog = preg_replace( '/^## /m', '#### ', $changelog );
-
-		$obj->sections['changelog'] = $parsedown->text( $changelog );
-
-		return $obj;
 	}
 
 	/**
