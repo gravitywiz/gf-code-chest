@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "2e627c077d218412acf2080356d2cd88",
+    "content-hash": "6bb14e6acf22d60abd59e3f694ec3e57",
     "packages": [
         {
             "name": "automattic/jetpack-autoloader",
@@ -162,6 +162,53 @@
                 "source": "https://github.com/gravitywiz/spellbook-bootstrap/tree/0.0.5"
             },
             "time": "2026-04-07T16:08:44+00:00"
+        },
+        {
+            "name": "inc2734/wp-github-plugin-updater",
+            "version": "3.1.16",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/inc2734/wp-github-plugin-updater.git",
+                "reference": "412ce8dcd4f6ab264fd4ad9fe590147323c41d55"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/inc2734/wp-github-plugin-updater/zipball/412ce8dcd4f6ab264fd4ad9fe590147323c41d55",
+                "reference": "412ce8dcd4f6ab264fd4ad9fe590147323c41d55",
+                "shasum": ""
+            },
+            "require": {
+                "erusev/parsedown": "^1.7",
+                "php": ">=7.4"
+            },
+            "require-dev": {
+                "dealerdirect/phpcodesniffer-composer-installer": "^1.0",
+                "phpcompatibility/phpcompatibility-wp": "*",
+                "wp-coding-standards/wpcs": "^3.1",
+                "yoast/phpunit-polyfills": "^1.1"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Inc2734\\WP_GitHub_Plugin_Updater\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "GPL-2.0-or-later"
+            ],
+            "authors": [
+                {
+                    "name": "Takashi Kitajima",
+                    "email": "inc@2inc.org"
+                }
+            ],
+            "description": "A library for WordPress that automatic plugin updater with GitHub API.",
+            "support": {
+                "issues": "https://github.com/inc2734/wp-github-plugin-updater/issues",
+                "source": "https://github.com/inc2734/wp-github-plugin-updater/tree/3.1.16"
+            },
+            "time": "2025-03-31T10:54:25+00:00"
         }
     ],
     "packages-dev": [
