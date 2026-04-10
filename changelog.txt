@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.0.9 | April 10, 2026
+
+- Removed Github auto-updater. Updates are now handled via Spellbook!
+- Improved Spellbook Bootstrap integration for better cross-plugin compatibility and reduced duplicate loading.
+
 ## 1.0.8 | June 17, 2025
 
 - Updated the plugin description and URLs.
