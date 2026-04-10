@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.0.10 | April 10, 2026
+
+- Fixed error that could occur when upgrading due to the GitHub plugin updater logic being removed. To remedy this, we've temporarily re-added the GitHub plugin updater as a dependency, but it is no longer instantiated.
+
 ## 1.0.9 | April 10, 2026
 
 - Removed Github auto-updater. Updates are now handled via Spellbook!
