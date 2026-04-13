@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "6bb14e6acf22d60abd59e3f694ec3e57",
+    "content-hash": "ad9f704ba1efa2ebde11211b8efc0c6b",
     "packages": [
         {
             "name": "automattic/jetpack-autoloader",
@@ -129,16 +129,16 @@
         },
         {
             "name": "gravitywiz/spellbook-bootstrap",
-            "version": "0.0.5",
+            "version": "0.0.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/gravitywiz/spellbook-bootstrap.git",
-                "reference": "0fed28fd75e130e5e66cbb4175356176bae39d44"
+                "reference": "848fd3e86f66df5bf893e6f2b39e5bd52ee9aa89"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/gravitywiz/spellbook-bootstrap/zipball/0fed28fd75e130e5e66cbb4175356176bae39d44",
-                "reference": "0fed28fd75e130e5e66cbb4175356176bae39d44",
+                "url": "https://api.github.com/repos/gravitywiz/spellbook-bootstrap/zipball/848fd3e86f66df5bf893e6f2b39e5bd52ee9aa89",
+                "reference": "848fd3e86f66df5bf893e6f2b39e5bd52ee9aa89",
                 "shasum": ""
             },
             "require-dev": {
@@ -159,9 +159,9 @@
             ],
             "description": "Shared bootstrapper for Gravity Wiz plugins.",
             "support": {
-                "source": "https://github.com/gravitywiz/spellbook-bootstrap/tree/0.0.5"
+                "source": "https://github.com/gravitywiz/spellbook-bootstrap/tree/0.0.6"
             },
-            "time": "2026-04-07T16:08:44+00:00"
+            "time": "2026-04-13T01:34:25+00:00"
         },
         {
             "name": "inc2734/wp-github-plugin-updater",
