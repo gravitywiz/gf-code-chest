@@ -84,7 +84,7 @@ class GWiz_GF_Code_Chest extends GFFeedAddOn {
 	 * Give the form settings and plugin settings panels a nice shiny icon.
 	 */
 	public function get_menu_icon() {
-		return $this->get_base_url() . '/assets/images/gf-icon.svg';
+		return file_get_contents( __DIR__ . '/assets/images/gf-icon.svg' );
 	}
 
 	/**
@@ -594,4 +594,3 @@ EOT;
 function gwiz_gf_code_chest() {
 	return GWiz_GF_Code_Chest::get_instance();
 }
-
