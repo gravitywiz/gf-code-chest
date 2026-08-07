@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.0.12 | August 7, 2026
+
+- Fixed issue where the Code Chest icon rendered inconsistently with other Gravity Forms add-ons.
+
 ## 1.0.11 | April 13, 2026
 
 - Updated Spellbook bootstrap.
