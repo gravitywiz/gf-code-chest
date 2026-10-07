@@ -1,0 +1,17 @@
+name: Spellbook conformance
+
+# Runs this product's Spellbook suites (tests/spellbook) and Spellbook's conformance kit against every
+# Spellbook version products support. Private source credentials reach only trusted branch pushes and
+# manual runs; never add a pull_request_target trigger.
+on:
+  push:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  spellbook:
+    uses: gravitywiz/spellbook/.github/workflows/product-conformance.yml@spellbook-ai/main
+    secrets:
+      SSH_KEY_GWIZ_BUILDER: ${{ secrets.SSH_KEY_GWIZ_BUILDER }}

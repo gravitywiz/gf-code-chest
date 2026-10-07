@@ -17,6 +17,8 @@
 
 	<!-- Handled by ESLint -->
 	<exclude-pattern>*.js</exclude-pattern>
+	<!-- Spellbook's conformance kit runs these suites, in its own test style. -->
+	<exclude-pattern>/tests/spellbook/*</exclude-pattern>
 
 	<!-- Run against the PHPCompatibility ruleset -->
 	<rule ref="PHPCompatibility"/>
