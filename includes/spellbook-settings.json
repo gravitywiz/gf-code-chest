@@ -1,0 +1,49 @@
+{
+  "descriptors": [
+    {
+      "id": "gf-code-chest",
+      "target": "page",
+      "lifecycles": [
+        "draft"
+      ],
+      "name": "Code Chest",
+      "description": "The CSS and JavaScript of the form open in the native Code Chest editor, and whether its CSS is scoped to the form. Proposals replace a language's code whole and change only the editor's unsaved draft. Each language holds at most 8 KiB (8,192 UTF-8 bytes) of code. PHP is not supported.",
+      "settings": {
+        "css": {
+          "label": "CSS",
+          "display": "code",
+          "schema": {
+            "type": "string",
+            "maxLength": 8192
+          }
+        },
+        "js": {
+          "label": "JavaScript",
+          "display": "code",
+          "schema": {
+            "type": "string",
+            "maxLength": 8192
+          }
+        },
+        "scopeCssToForm": {
+          "label": "Scope CSS to this form",
+          "schema": {
+            "type": "boolean"
+          }
+        }
+      },
+      "page": {
+        "scope": "form",
+        "values": "settings",
+        "script": "gf-code-chest-spellbook",
+        "valuesBytes": 33024,
+        "saveNotice": "Review the native editors, then use Save Settings. Code has not been executed or saved by this action."
+      },
+      "callbacks": {
+        "identity": "GWiz_GF_Code_Chest_Spellbook::identity",
+        "validate": "GWiz_GF_Code_Chest_Spellbook::validate",
+        "sources": "GWiz_GF_Code_Chest_Spellbook::sources"
+      }
+    }
+  ]
+}

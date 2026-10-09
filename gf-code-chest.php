@@ -34,3 +34,12 @@ add_action( 'gform_loaded', function() {
 	GFAddOn::register( 'GWiz_GF_Code_Chest' );
 }, 0 ); // Load before Gravity Flow
 
+
+// Optional saved-code tools, the native editor's draft binding and its descriptor callbacks; no dependency when Spellbook is absent.
+require_once __DIR__ . '/includes/class-gwiz-gf-code-chest-spellbook.php';
+
+// The native editor's page draft in includes/spellbook-settings.json, and public workflow facts in
+// includes/spellbook-guidance.json, which grant no code-editing or saved-settings authority.
+add_action( 'spellbook_assistant_contracts_register', static function () {
+	Spellbook_Assistant_Contracts::declare( __FILE__ );
+} );

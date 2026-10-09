@@ -1,0 +1,20 @@
+{
+  "version": 1,
+  "revision": "2026-10-04.3",
+  "applicability": "Code Chest's optional companion integration when Code Chest and a compatible Spellbook are active. Current tools and native permissions determine whether a saved-code review or native code draft can be edited.",
+  "sources": [
+    { "title": "Code Chest assistant integration", "reference": "gf-code-chest: includes/class-gwiz-gf-code-chest-spellbook.php" },
+    { "title": "Native code draft synchronization", "reference": "gf-code-chest: assets/js/spellbook-assistant.js" },
+    { "title": "Saved code approval", "reference": "gf-code-chest: includes/class-gwiz-gf-code-chest-spellbook-saved.php" }
+  ],
+  "useCases": [
+    { "id": "form-code", "title": "Style or customize a form", "appliesWhen": "The user wants form-specific styling or JavaScript behavior.", "detail": "Code Chest stores form-specific CSS and JavaScript. Its assistant companion reads existing code and prepares reviewed replacements from supported assistant pages. PHP is not supported." }
+  ],
+  "prerequisites": [
+    { "id": "code-tools", "title": "Use the current page's code tools", "appliesWhen": "Choosing how to make a Code Chest change.", "detail": "When code_chest_read_saved_code and code_chest_prepare_saved_code are listed, inspect saved code and prepare a Save code changes review from this page. In the native Code Chest editor, use draft tools for its current form; saved tools may target other forms without replacing that unsaved work. Open Code Chest is optional navigation; absent field/form configuration schemas do not establish that code editing is unavailable." }
+  ],
+  "qualifications": [
+    { "id": "review-and-save", "title": "Review before saving", "appliesWhen": "Preparing or applying a Code Chest code change.", "detail": "Read current code before proposing changes. A saved-code review requires an explicit Save code changes click and rejects stale code. Saved CSS/JavaScript affect later form renders, even if the native code feed is inactive. A native editor draft proposal only changes unsaved inputs; Save Settings persists that draft. Neither path tests the code or supplies an unsaved frontend preview." }
+  ],
+  "composition": []
+}

@@ -9,13 +9,24 @@
     
         wp.codeEditor.initialize = function(textarea, settings) {
             const editor = originalInitialize(textarea, settings);
+            const mode = editor.codemirror.getOption('mode');
+            const modeName = typeof mode === 'string' ? mode : mode && mode.name;
+            const lintOptions = editor.codemirror.getOption('lint');
+            // Preserve CSS's own parser and the user's disabled-lint preference.
+            if (!lintOptions || !['javascript', 'text/javascript', 'application/javascript'].includes(modeName)) {
+                return editor;
+            }
             const customLinter = createCustomLinter(wp.CodeMirror);
-
-            editor.codemirror.setOption('lint', function(text, options) {
-                const defaultLintAnnotations = wp.CodeMirror.lint.javascript(text, options);
-
-                return defaultLintAnnotations.concat(customLinter(text));
-            });
+            const options = typeof lintOptions === 'object' ? Object.assign({}, lintOptions) : {};
+            const defaultLinter = options.getAnnotations || wp.CodeMirror.lint.javascript;
+            options.getAnnotations = function(text, options, codeMirror) {
+                const annotations = defaultLinter(text, options, codeMirror);
+                const appendWarnings = function(items) { return items.concat(customLinter(text)); };
+                // WordPress 7 uses an asynchronous Espree parser; older versions return an array.
+                return annotations && typeof annotations.then === 'function' ? annotations.then(appendWarnings) : appendWarnings(annotations);
+            };
+            // Retain WordPress's parser URL, error notices and native lint configuration.
+            editor.codemirror.setOption('lint', options);
 
             return editor;
         };

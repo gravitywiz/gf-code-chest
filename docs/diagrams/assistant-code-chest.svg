@@ -1,0 +1,55 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1120" height="1090" viewBox="0 0 1120 1090" role="img" aria-labelledby="title desc">
+<title id="title">Review code, update the native draft, then save</title>
+<desc id="desc">Code Chest owns the current CSS, JavaScript and scoping setting. Spellbook sends bounded, authorized context to the model. A PHP extension validates the proposed code and returns a review card. Only the user's Apply action changes the CodeMirror draft and backing native inputs. Revision checks protect manual edits. Undo restores the previous draft; Code Chest's native Save remains the persistence step.</desc>
+<defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10Z" fill="#7042C1"/></marker></defs>
+<style>text{font-family:Inter,-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif;fill:#27213D}.muted{fill:#625B72}.purple{fill:#7042C1}.title{font-size:28px;font-weight:650}.label{font-size:13px;letter-spacing:1.3px;font-weight:700}.heading{font-size:21px;font-weight:650}.body{font-size:17px}.small{font-size:15px}.edge{fill:none;stroke:#7042C1;stroke-width:2;marker-end:url(#arrow)}</style>
+<rect width="1120" height="1090" rx="20" fill="#FCFBFE"/>
+<text x="40" y="32" class="label purple">CODE CHEST DRAFTS</text>
+<text x="40" y="72" class="title">Review code. Update the native draft. Save when ready.</text>
+<text x="40" y="103" class="body muted">Spellbook owns the conversation; Code Chest owns editing and persistence.</text>
+
+<rect x="40" y="142" width="480" height="183" rx="14" fill="#EFF8F3" stroke="#DCD5E9"/>
+<text x="62" y="175" class="label purple">BROWSER · CODE CHEST COMPANION</text>
+<text x="62" y="211" class="heading">Capture the current native draft</text>
+<text x="62" y="248" class="body muted">CSS, JavaScript, scoping and revision</text>
+<text x="62" y="280" class="body muted">CodeMirror and native inputs stay authoritative</text>
+<path class="edge" d="M528 235H592"/>
+<rect x="600" y="142" width="480" height="183" rx="14" fill="#F4EEFC" stroke="#DCD5E9"/>
+<text x="622" y="175" class="label purple">SITE PHP · PRODUCT EXTENSION</text>
+<text x="622" y="211" class="heading">Authorize and bound context</text>
+<text x="622" y="248" class="body muted">Native capabilities and selected form</text>
+<text x="622" y="280" class="body muted">Separate saved code from unsaved draft</text>
+
+<path class="edge" d="M840 333V375"/>
+<rect x="600" y="385" width="480" height="180" rx="14" fill="#FAF8FD" stroke="#7042C1"/>
+<text x="622" y="418" class="label purple">AI PROVIDER · THROUGH SPELLBOOK</text>
+<text x="622" y="454" class="heading">Inspect, explain and propose</text>
+<text x="622" y="491" class="body muted">Read-only tools and proposal preparation</text>
+<text x="622" y="529" class="small purple">No code execution or saved writes</text>
+<path class="edge" d="M592 475H528"/>
+<rect x="40" y="385" width="480" height="180" rx="14" fill="#F4EEFC" stroke="#DCD5E9"/>
+<text x="62" y="418" class="label purple">SITE PHP → BROWSER</text>
+<text x="62" y="454" class="heading">Validate and display the proposal</text>
+<text x="62" y="491" class="body muted">Bounded code, exact scope and revision</text>
+<text x="62" y="529" class="small purple">Review the code diff before applying</text>
+
+<path class="edge" d="M280 573V615"/>
+<rect x="40" y="625" width="480" height="188" rx="14" fill="#EFF8F3" stroke="#DCD5E9"/>
+<text x="62" y="658" class="label purple">BROWSER · USER CLICKS APPLY</text>
+<text x="62" y="694" class="heading">Recheck the live draft</text>
+<text x="62" y="731" class="body muted">Resource and revision must still match</text>
+<text x="62" y="769" class="small purple">Manual edits make an older proposal stale</text>
+<path class="edge" d="M528 718H592"/>
+<rect x="600" y="625" width="480" height="188" rx="14" fill="#EFF8F3" stroke="#DCD5E9"/>
+<text x="622" y="658" class="label purple">BROWSER · CODE CHEST COMPANION</text>
+<text x="622" y="694" class="heading">Update native editor controls</text>
+<text x="622" y="731" class="body muted">CodeMirror + textarea + CSS scope</text>
+<text x="622" y="769" class="small purple">Undo / Redo retain the reviewed draft change</text>
+
+<path class="edge" d="M840 821V859"/>
+<rect x="40" y="869" width="1040" height="147" rx="14" fill="white" stroke="#DCD5E9"/>
+<text x="62" y="902" class="label purple">USER CLICKS NATIVE SAVE · CODE CHEST PERSISTENCE</text>
+<text x="62" y="938" class="heading">The saved code takes effect where the form renders</text>
+<text x="62" y="977" class="body muted">Applying a chat proposal changes only the draft. The native Save action persists it.</text>
+<text x="40" y="1054" class="small muted">CSS and JavaScript only. Code Chest ignores feed active state; generic inactive-feed reviews do not apply.</text>
+</svg>
